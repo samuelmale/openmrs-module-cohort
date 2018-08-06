@@ -163,6 +163,16 @@
             </column>
         </addColumn>
     </changeSet>
+	<changeSet author="maimoonak" id="cohortmemberdropPrimaryKey">
+		<sql>
+		ALTER TABLE `openmrs`.`cohort_member` 
+		DROP FOREIGN KEY `parent_cohort`,
+		DROP FOREIGN KEY `member_patient`;
+		ALTER TABLE `openmrs`.`cohort_member` 
+		DROP INDEX `member_patient` ,
+		DROP PRIMARY KEY;
+		</sql>
+	</changeSet>
     <changeSet id="cohort_member1065" author="sharon">
         <addColumn tableName="cohort_member">
             <column name="cohort_member_id" autoIncrement="true" type="int(11)">
