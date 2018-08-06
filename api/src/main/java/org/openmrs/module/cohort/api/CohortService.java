@@ -77,7 +77,7 @@ public interface CohortService extends OpenmrsService {
 	CohortAttribute getCohortAttributeById(Integer id);
 	CohortAttribute saveCohortAttribute(CohortAttribute att);
 	void purgeCohortAtt(CohortAttribute att);
-	List<CohortAttribute> getCohortAttributesByCohortId(Integer id);
+	List<CohortAttribute> findCohortAttributes(Integer cohortId, Integer attributeTypeId);
 	
 	CohortRole getCohortRoleByUuid(String uuid);
 	CohortRole getCohortRoleByName(String name);
@@ -127,8 +127,7 @@ public interface CohortService extends OpenmrsService {
 	List<CohortObs> getObservations(List<CohortM> whom,
 			List<CohortEncounter> encounters, List<Concept> questions,
 			List<Concept> answers, List<Location> locations, List<String> sort,
-			Integer mostRecentN, Integer obsGroupId, Date fromDate,
-			Date toDate, boolean includeVoidedObs);
+			Integer mostRecentN, Integer obsGroupId, Date fromDate, Date toDate, boolean includeVoidedObs);
 	List<CohortObs> getObservationsByCohortAndConcept(CohortM who, Concept question);
 	CohortObs saveCohortObs(CohortObs cobs);
 	CohortObs voidObs(CohortObs obs, String reason);

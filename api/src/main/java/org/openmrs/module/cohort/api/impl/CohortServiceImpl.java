@@ -460,8 +460,8 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	}
 
 	@Override
-	public List<CohortAttribute> getCohortAttributesByCohortId(Integer id) {
-		return dao.getCohortAttributesByCohortId(id);
+	public List<CohortAttribute> findCohortAttributes(Integer cohortId, Integer attributeTypeId) {
+		return dao.findCohortAttributes(cohortId, attributeTypeId);
 	}
 
 	@Override

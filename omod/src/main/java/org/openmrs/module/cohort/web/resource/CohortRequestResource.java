@@ -6,7 +6,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.rest.v1_0.resource.CohortRest;
-import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -77,7 +76,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
     
     @Override
     public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
-    	return super.getCreatableProperties();
+    	return getCreatableProperties();
     }
 
     @Override
@@ -87,12 +86,13 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 
     @Override
     protected void delete(CohortM cohort, String reason, RequestContext request) throws ResponseException {
+    	cohort.setVoided(true);
     	cohort.setVoidReason(reason);
-        Context.getService(CohortService.class).purgeCohort(cohort);
+        Context.getService(CohortService.class).saveCohort(cohort);
     }
 
     @Override
-    public void purge(CohortM cohort, RequestContext arg1) throws ResponseException {
+    public void purge(CohortM cohort, RequestContext request) throws ResponseException {
         Context.getService(CohortService.class).purgeCohort(cohort);
     }
 
@@ -114,11 +114,11 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
     }
 
     @Override
-    public SimpleObject getAll(RequestContext request) throws ResponseException {
-        List<CohortM> cohort = Context.getService(CohortService.class).getAllCohorts();
-        return new NeedsPaging<CohortM>(cohort, request).toSimpleObject(this);
+    protected PageableResult doGetAll(RequestContext context) throws ResponseException {
+    	List<CohortM> cohort = Context.getService(CohortService.class).getAllCohorts();
+        return new NeedsPaging<CohortM>(cohort, context);
     }
-    
+
     @Override
     protected PageableResult doSearch(RequestContext context) {
         List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"));

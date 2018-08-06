@@ -28,7 +28,7 @@ public class AddCohortProgramValidator implements Validator {
         CohortProgram program = (CohortProgram) command;
 
         // TODO change it to find by name and then reject
-        for (CohortProgram programs : cohortService.findCohortProg()) {
+        for (CohortProgram programs : cohortService.getAllCohortPrograms()) {
             if (program.getName().equals(programs.getName())) {
             	errors.rejectValue("name", "An entry with this name already exists");
             }

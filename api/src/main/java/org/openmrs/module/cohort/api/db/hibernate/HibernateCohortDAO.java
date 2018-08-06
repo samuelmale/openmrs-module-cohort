@@ -818,9 +818,18 @@ public class HibernateCohortDAO implements CohortDAO {
 	}
 
 	@Override
-	public List<CohortAttribute> getCohortAttributesByCohortId(Integer id) {
-		return getCurrentSession().createCriteria(CohortAttribute.class,"cohortAttribute").createAlias("cohortAttribute.cohort", "cohort").add(Restrictions.eq("cohort.cohortId", id)).list();
+	public List<CohortAttribute> findCohortAttributes(Integer cohortId, Integer attributeTypeId) {
+		Criteria cri = getCurrentSession().createCriteria(CohortAttribute.class);
+		if(cohortId != null) {
+			cri.createAlias("cohort", "c");
+			cri.add(Restrictions.eq("c.cohortId", cohortId));
+		}
 		
+		if(attributeTypeId != null) {
+			cri.createAlias("cohortAttributeType", "a");
+			cri.add(Restrictions.eq("a.cohortAttributeTypeId", attributeTypeId));
+		}
+		return cri.list();
 	}
 
 	@Override

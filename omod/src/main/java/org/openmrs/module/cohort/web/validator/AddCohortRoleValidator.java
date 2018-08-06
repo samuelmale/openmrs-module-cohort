@@ -1,7 +1,5 @@
 package org.openmrs.module.cohort.web.validator;
 
-import java.util.List;
-
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortRole;
 import org.openmrs.module.cohort.api.CohortService;
@@ -25,15 +23,12 @@ public class AddCohortRoleValidator implements Validator {
         CohortService cohortService = Context.getService(CohortService.class);
         
         CohortRole currentRole = (CohortRole) command;
-        List<CohortRole> allRoles = cohortService.findRoles(currentRole.getName());
+        CohortRole role = cohortService.getCohortRoleByName(currentRole.getName());
         
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "required");
 
-        // TODO change it to find by name and then reject
-        for (CohortRole roles : allRoles) {
-            if (roles.getName().equals(currentRole.getName())) {
-            	errors.rejectValue("name", "An entry with this name already exists");
-            }
+        if (role != null) {
+        	errors.rejectValue("name", "An entry with this name already exists");
         }
     }
 }

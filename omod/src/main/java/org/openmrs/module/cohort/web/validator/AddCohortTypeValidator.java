@@ -1,7 +1,5 @@
 package org.openmrs.module.cohort.web.validator;
 
-import java.util.List;
-
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.cohort.api.CohortService;
@@ -28,13 +26,10 @@ public class AddCohortTypeValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "required");
         
         CohortType currentType = (CohortType) command;
-        List<CohortType> cohortTypes = cohortService.findCohortType();
+        CohortType type = cohortService.getCohortTypeByName(currentType.getName());
         
-        // TODO change it to find by name and then reject
-        for (CohortType type : cohortTypes) {
-            if (type.getName().equals(currentType.getName())) {
-            	errors.rejectValue("name", "a cohort type with the same name already exists");
-            }
+        if (type != null) {
+        	errors.rejectValue("name", "a cohort type with the same name already exists");
         }
     }
 }

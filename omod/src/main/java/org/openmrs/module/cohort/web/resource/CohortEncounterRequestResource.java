@@ -4,60 +4,78 @@ import java.util.List;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortEncounter;
+import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.rest.v1_0.resource.CohortRest;
-import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
+import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortenc", supportedClass = CohortEncounter.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*, 1.10.*, 1.11.*", "1.12.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortencounter", supportedClass = CohortEncounter.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*, 1.10.*, 1.11.*", "1.12.*"})
 public class CohortEncounterRequestResource extends DataDelegatingCrudResource<CohortEncounter> {
 
     @Override
-    public DelegatingResourceDescription getRepresentationDescription(
-            Representation rep) {
+    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 
         DelegatingResourceDescription description = null;
 
-        if (Context.isAuthenticated()) {
-            description = new DelegatingResourceDescription();
-            if (rep instanceof DefaultRepresentation) {
-                description.addProperty("encounterId");
-                description.addProperty("cohort");
-                description.addProperty("encounterType", Representation.REF);
-                description.addProperty("location", Representation.REF);
-                description.addProperty("form", Representation.REF);
-                description.addProperty("visit");
-                description.addProperty("encounterDateTime");
-                description.addProperty("uuid");
-            } else if (rep instanceof FullRepresentation) {
-                description.addProperty("encounterId");
-                description.addProperty("cohort");
-                description.addProperty("encounterType");
-                description.addProperty("location");
-                description.addProperty("form");
-                description.addProperty("visit");
-                description.addProperty("encounterDateTime");
-                description.addProperty("uuid");
-            }
-        }
+		if (Context.isAuthenticated()) {
+			description = new DelegatingResourceDescription();
+			if (rep instanceof DefaultRepresentation) {
+				description.addProperty("cohort");
+				description.addProperty("encounterType", Representation.REF);
+				description.addProperty("location", Representation.REF);
+				description.addProperty("form", Representation.REF);
+				description.addProperty("visit");
+				description.addProperty("encounterDateTime");
+				description.addProperty("encounterProviders");
+				description.addProperty("obs");
+				description.addProperty("uuid");
+	            description.addSelfLink();
+			} 
+			else if (rep instanceof FullRepresentation) {
+				description.addProperty("cohort");
+				description.addProperty("encounterType");
+				description.addProperty("location");
+				description.addProperty("form");
+				description.addProperty("visit");
+				description.addProperty("encounterDateTime");
+				description.addProperty("encounterProviders");
+				description.addProperty("obs");
+				description.addProperty("uuid");
+				description.addProperty("auditInfo");
+	            description.addSelfLink();
+			}
+		}
         return description;
     }
 
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addRequiredProperty("cohort");
-        description.addRequiredProperty("visit");
+        description.addProperty("cohort");
+		description.addProperty("encounterType");
+		description.addProperty("location");
+		description.addProperty("form");
+		description.addProperty("visit");
+		description.addProperty("encounterDateTime");
+		description.addProperty("encounterProviders");
+		description.addProperty("obs");
         return description;
+    }
+    
+    @Override
+    public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
+    	return getCreatableProperties();
     }
 
     @Override
@@ -66,34 +84,41 @@ public class CohortEncounterRequestResource extends DataDelegatingCrudResource<C
     }
 
     @Override
-    public CohortEncounter save(CohortEncounter arg0) {
-        return Context.getService(CohortService.class).saveCohortEncounters(arg0);
+    public CohortEncounter save(CohortEncounter cohortEncounter) {
+        return Context.getService(CohortService.class).saveCohortEncounter(cohortEncounter);
     }
 
     @Override
-    protected void delete(CohortEncounter arg0, String arg1, RequestContext arg2)
-            throws ResponseException {
-
-        Context.getService(CohortService.class).purgeCohortEncounters(arg0);
+    protected void delete(CohortEncounter cohortEncounter, String reason, RequestContext context) throws ResponseException {
+    	cohortEncounter.setVoided(true);
+    	cohortEncounter.setVoidReason(reason);
+        Context.getService(CohortService.class).saveCohortEncounter(cohortEncounter);
     }
 
     @Override
     public CohortEncounter getByUniqueId(String uuid) {
-        return Context.getService(CohortService.class).getCohortEncUuid(uuid);
+        return Context.getService(CohortService.class).getCohortEncounterByUuid(uuid);
     }
 
     @Override
-    public void purge(CohortEncounter arg0, RequestContext arg1)
-            throws ResponseException {
-        // TODO Auto-generated method stub
-
+    public void purge(CohortEncounter cohortEncounter, RequestContext context) throws ResponseException {
+    	Context.getService(CohortService.class).purgeCohortEncounter(cohortEncounter);
     }
 
     @Override
-    public SimpleObject getAll(RequestContext arg0) throws ResponseException {
-        List<CohortEncounter> cohort = Context.getService(CohortService.class).findCohortEncounters();
-        return new NeedsPaging<CohortEncounter>(cohort, arg0).toSimpleObject(this);
+    protected PageableResult doSearch(RequestContext context) {
+    	String cohort = context.getParameter("cohort");
+    	String q = context.getParameter("q");
+    	
+    	CohortM cohorto = Context.getService(CohortService.class).getCohortByName(cohort);
+    	if(cohorto == null) {
+    		cohorto = Context.getService(CohortService.class).getCohortByUuid(cohort);
+    	}
+    	
+    	if(cohorto == null) {
+    		throw new IllegalArgumentException("No valid value specified for param cohort");
+    	}
+    	List<CohortEncounter> list = Context.getService(CohortService.class).getEncountersByCohort(q, cohorto.getCohortId(), true);
+    	return new NeedsPaging<CohortEncounter>(list, context);
     }
-
-
 }
