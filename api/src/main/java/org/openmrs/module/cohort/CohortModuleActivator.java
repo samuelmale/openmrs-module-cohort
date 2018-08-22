@@ -16,53 +16,32 @@ package org.openmrs.module.cohort;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.ModuleActivator;
+import org.openmrs.module.BaseModuleActivator;
 
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
  */
-public class CohortModuleActivator implements ModuleActivator {
+public class CohortModuleActivator extends BaseModuleActivator {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	
-	/**
-	 * @see ModuleActivator#willRefreshContext()
-	 */
-	public void willRefreshContext() {
-		log.info("Refreshing cohort Module");
-	}
 	
-	/**
-	 * @see ModuleActivator#contextRefreshed()
-	 */
-	public void contextRefreshed() {
-		log.info("cohort Module refreshed");
-	}
-	
-	/**
-	 * @see ModuleActivator#willStart()
-	 */
+	@Override
 	public void willStart() {
 		log.info("Starting cohort Module");
 	}
 	
-	/**
-	 * @see ModuleActivator#started()
-	 */
+	@Override
 	public void started() {
 		log.info("cohort Module started");
 	}
 	
-	/**
-	 * @see ModuleActivator#willStop()
-	 */
+	@Override
 	public void willStop() {
 		log.info("Stopping cohort Module");
 	}
 	
-	/**
-	 * @see ModuleActivator#stopped()
-	 */
+	@Override
 	public void stopped() {
 		log.info("cohort Module stopped");
 	}

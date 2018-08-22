@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 
 <hibernate-mapping>
-    <class name="org.openmrs.module.cohort.CohortAttribute" table="cohort_attributes">
+    <class name="org.openmrs.module.cohort.CohortAttribute" table="cohort_attribute">
         <id name="cohortAttributeId" type="java.lang.Integer" column="cohort_attribute_id">
             <generator class="native"></generator>
         </id>
@@ -12,7 +12,7 @@
                      column="cohort_id" not-null="true" cascade="all"/>
         <property name="value" type="java.lang.String"/>
         <many-to-one name="cohortAttributeType" class="org.openmrs.module.cohort.CohortAttributeType"
-                     column="cohort_attribute_type" not-null="true" cascade="all"/>
+                     column="cohort_attribute_type_id" not-null="true" cascade="all"/>
                      
         <property name="uuid" type="java.lang.String" length="38" unique="true"/>
     	<property name="dateCreated" column="date_created" type="java.util.Date" not-null="true"/>

@@ -20,7 +20,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortencounter", supportedClass = CohortEncounter.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*, 1.10.*, 1.11.*", "1.12.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortencounter", supportedClass = CohortEncounter.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
 public class CohortEncounterRequestResource extends DataDelegatingCrudResource<CohortEncounter> {
 
     @Override
@@ -36,7 +36,7 @@ public class CohortEncounterRequestResource extends DataDelegatingCrudResource<C
 				description.addProperty("location", Representation.REF);
 				description.addProperty("form", Representation.REF);
 				description.addProperty("visit");
-				description.addProperty("encounterDateTime");
+				description.addProperty("encounterDatetime");
 				description.addProperty("encounterProviders");
 				description.addProperty("obs");
 				description.addProperty("uuid");
@@ -48,7 +48,7 @@ public class CohortEncounterRequestResource extends DataDelegatingCrudResource<C
 				description.addProperty("location");
 				description.addProperty("form");
 				description.addProperty("visit");
-				description.addProperty("encounterDateTime");
+				description.addProperty("encounterDatetime");
 				description.addProperty("encounterProviders");
 				description.addProperty("obs");
 				description.addProperty("uuid");
@@ -62,14 +62,14 @@ public class CohortEncounterRequestResource extends DataDelegatingCrudResource<C
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addProperty("cohort");
-		description.addProperty("encounterType");
-		description.addProperty("location");
-		description.addProperty("form");
-		description.addProperty("visit");
-		description.addProperty("encounterDateTime");
-		description.addProperty("encounterProviders");
-		description.addProperty("obs");
+        description.addRequiredProperty("cohort");
+		description.addRequiredProperty("encounterType");
+		description.addRequiredProperty("location");
+		description.addRequiredProperty("form");
+		description.addRequiredProperty("visit");
+		description.addRequiredProperty("encounterDatetime");
+		description.addRequiredProperty("encounterProviders");
+		description.addRequiredProperty("obs");
         return description;
     }
     

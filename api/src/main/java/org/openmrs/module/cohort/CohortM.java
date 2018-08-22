@@ -16,7 +16,7 @@ public class CohortM extends BaseOpenmrsData {
 	private Date endDate;
 	private CohortType cohortType;
 	private CohortProgram cohortProgram;
-	private boolean groupCohort;
+	private Boolean groupCohort;
 	
 	public Integer getCohortId() {
 		return cohortId;
@@ -82,13 +82,15 @@ public class CohortM extends BaseOpenmrsData {
 		this.cohortProgram = cohortProgram;
 	}
 
-	public boolean isGroupCohort() {
+	public Boolean isGroupCohort() {
 		return groupCohort;
 	}
 
-	public void setGroupCohort(boolean groupCohort) {
+	public void setGroupCohort(Boolean groupCohort) {
 		this.groupCohort = groupCohort;
 	}
+
+	public Boolean getGroupCohort() { return this.groupCohort; }
 
 	@Override
 	public Integer getId() {

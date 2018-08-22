@@ -16,7 +16,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortvisit", supportedClass = CohortVisit.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*, 1.10.*, 1.11.*", "1.12.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortvisit", supportedClass = CohortVisit.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
 public class CohortVisitRequestResource extends DataDelegatingCrudResource<CohortVisit> {
 
     @Override
@@ -27,6 +27,7 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
             if (rep instanceof DefaultRepresentation) {
+                description.addProperty("cohort");
                 description.addProperty("visitType");
                 description.addProperty("location");
                 description.addProperty("startDate");
@@ -35,6 +36,7 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
                 description.addSelfLink();
             } 
             else if (rep instanceof FullRepresentation) {
+                description.addProperty("cohort");
                 description.addProperty("visitType");
                 description.addProperty("location");
                 description.addProperty("startDate");
@@ -50,6 +52,7 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
+        description.addRequiredProperty("cohort");
         description.addRequiredProperty("visitType");
         description.addRequiredProperty("location");
         description.addRequiredProperty("startDate");
