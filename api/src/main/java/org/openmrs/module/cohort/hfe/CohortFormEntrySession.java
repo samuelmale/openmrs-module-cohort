@@ -85,7 +85,7 @@ public class CohortFormEntrySession extends FormEntrySession {
 		if (encounter != null) {
 			Encounter e = new Encounter();
 			e.setEncounterType(encounter.getEncounterType());
-			e.setEncounterDatetime(encounter.getEncounterDateTime());
+			e.setEncounterDatetime(encounter.getEncounterDatetime());
 			e.setLocation(encounter.getLocation());
 			e.setForm(encounter.getForm());
 			Set<EncounterProvider> eps = new HashSet<EncounterProvider>();
@@ -175,7 +175,7 @@ public class CohortFormEntrySession extends FormEntrySession {
 				cohortEncounter.setCohort(cohort);
 				cohortEncounter.setEncounterType(e.getEncounterType());
 				cohortEncounter.setForm(e.getForm());
-				cohortEncounter.setEncounterDateTime(e.getEncounterDatetime());
+				cohortEncounter.setEncounterDatetime(e.getEncounterDatetime());
 				cohortEncounter.setLocation(e.getLocation());
 				cohortEncounter.setEncounterProviders(e.getEncounterProviders());
 				//TODO add visit somehow

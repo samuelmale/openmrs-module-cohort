@@ -30,12 +30,12 @@ public class CohortEncounter extends BaseOpenmrsData {
 	private CohortM cohort;
 	private EncounterType encounterType;
 	private Location location;
-	private Date encounterDateTime;
+	private Date encounterDatetime;
 	private Form form;
 	private CohortVisit visit;
 	private Set<CohortObs> obs;
 	private Set<EncounterProvider> encounterProviders = new LinkedHashSet<EncounterProvider>();
-	
+
 	public Integer getEncounterId() {
 		return encounterId;
 	}
@@ -68,12 +68,12 @@ public class CohortEncounter extends BaseOpenmrsData {
 		this.location = location;
 	}
 
-	public Date getEncounterDateTime() {
-		return encounterDateTime;
+	public Date getEncounterDatetime() {
+		return encounterDatetime;
 	}
 
-	public void setEncounterDateTime(Date encounterDatetime) {
-		this.encounterDateTime = encounterDatetime;
+	public void setEncounterDatetime(Date encounterDatetime) {
+		this.encounterDatetime = encounterDatetime;
 	}
 
 	public Form getForm() {
@@ -248,7 +248,7 @@ public class CohortEncounter extends BaseOpenmrsData {
 				//if the attribute was already set, preserve it
 				//if not, inherit the values sfrom the encounter
 				if (o.getObsDateTime() == null) {
-					o.setObsDateTime(getEncounterDateTime());
+					o.setObsDateTime(getEncounterDatetime());
 				}
 				
 				//propagate attributes to  all group members as well
