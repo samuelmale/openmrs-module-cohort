@@ -212,21 +212,24 @@ public class HibernateCohortDAO implements CohortDAO {
 		criteria.add(Restrictions.eq("voided", false));
 		
 		if(StringUtils.isNotBlank(nameMatching)) {
-			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));
+			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));		
 		}
 		
 		if (attributes != null && !attributes.isEmpty()) {
-			Criteria cri = criteria.createCriteria("attributes", "attr");
-			cri.createAlias("attr.cohortAttributeType", "attrType");
-			cri.add(Restrictions.eq("attr.voided", false));
-			
+			Criteria cri = criteria.createCriteria("attributes")
+					.add(Restrictions.eq("voided", false))
+					.createAlias("cohortAttributeType", "attrType");
+
+			Disjunction dis = Restrictions.disjunction();
 			for (String k : attributes.keySet()) {
-				cri.add(Restrictions.eq("attrType.name", k))
-					.add(Restrictions.eq("value", attributes.get(k)));
+				dis.add(Restrictions.conjunction(
+							Restrictions.eq("attrType.name", k), Restrictions.eq("value", attributes.get(k))));
 			}
+			
+			cri.add(dis);
 		}
 		
-		// System.out.println(toSql(criteria));
+	//	System.out.println(toSql(criteria));
 		criteria.setProjection(null).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return criteria.list();
