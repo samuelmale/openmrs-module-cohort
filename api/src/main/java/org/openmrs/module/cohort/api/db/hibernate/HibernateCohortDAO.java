@@ -226,29 +226,29 @@ public class HibernateCohortDAO implements CohortDAO {
 			}
 		}
 		
-		System.out.println(toSql(criteria));
+		// System.out.println(toSql(criteria));
 		criteria.setProjection(null).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return criteria.list();
 	}
 	
-	private static String toSql(Criteria criteria) {
-		try {
-			CriteriaImpl c = (CriteriaImpl) criteria;
-			SessionImpl s = (SessionImpl) c.getSession();
-			SessionFactoryImplementor factory = (SessionFactoryImplementor) s.getSessionFactory();
-			String[] implementors = factory.getImplementors(c.getEntityOrClassName());
-			CriteriaLoader loader = new CriteriaLoader((OuterJoinLoadable) factory.getEntityPersister(implementors[0]),
-			        factory, c, implementors[0], s.getLoadQueryInfluencers());
-			
-			Field f = OuterJoinLoader.class.getDeclaredField("sql");
-			f.setAccessible(true);
-			return (String) f.get(loader);
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	private static String toSql(Criteria criteria) {
+//		try {
+//			CriteriaImpl c = (CriteriaImpl) criteria;
+//			SessionImpl s = (SessionImpl) c.getSession();
+//			SessionFactoryImplementor factory = (SessionFactoryImplementor) s.getSessionFactory();
+//			String[] implementors = factory.getImplementors(c.getEntityOrClassName());
+//			CriteriaLoader loader = new CriteriaLoader((OuterJoinLoadable) factory.getEntityPersister(implementors[0]),
+//			        factory, c, implementors[0], s.getLoadQueryInfluencers());
+//			
+//			Field f = OuterJoinLoader.class.getDeclaredField("sql");
+//			f.setAccessible(true);
+//			return (String) f.get(loader);
+//		}
+//		catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 	
 	@Override
 	public CohortVisit saveCohortVisit(CohortVisit cvisit) {

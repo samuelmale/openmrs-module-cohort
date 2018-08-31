@@ -16,11 +16,10 @@
         			column="cohort_type_id" not-null="true" cascade="all"/>
         <many-to-one name="cohortProgram" class="org.openmrs.module.cohort.CohortProgram"
                     column="cohort_program_id" not-null="true" cascade="all"/>
-        <list  name="attributes" cascade="all">
+        <bag  name="attributes" cascade="all">
 			<key column="cohort_id" />
-			<list-index column="cohort_attribute_id"/>
 			<one-to-many class="org.openmrs.module.cohort.CohortAttribute" />
-		</list >
+		</bag >
 
         <property name="groupCohort" type="java.lang.Boolean" column="is_group_cohort" length="1" not-null="true"/>
     
