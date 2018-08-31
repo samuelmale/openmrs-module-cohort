@@ -32,14 +32,14 @@ public class CohortAttributesRequestResource extends DataDelegatingCrudResource<
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
             if (rep instanceof DefaultRepresentation) {
-                description.addProperty("cohort");
+                description.addProperty("cohort", Representation.REF);
                 description.addProperty("value");
                 description.addProperty("cohortAttributeType");
                 description.addProperty("uuid");
 	            description.addSelfLink();
             } 
             else if (rep instanceof FullRepresentation) {
-                description.addProperty("cohort");
+                description.addProperty("cohort", Representation.REF);
                 description.addProperty("value");
                 description.addProperty("cohortAttributeType");
                 description.addProperty("uuid");

@@ -13,11 +13,13 @@
  */
 package org.openmrs.module.cohort.api.db.hibernate;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -31,6 +33,12 @@ import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.loader.OuterJoinLoader;
+import org.hibernate.loader.criteria.CriteriaLoader;
+import org.hibernate.persister.entity.OuterJoinLoadable;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.db.hibernate.PatientSearchCriteria;
 import org.openmrs.module.cohort.CohortAttribute;
@@ -199,11 +207,47 @@ public class HibernateCohortDAO implements CohortDAO {
 	}
 	
 	@Override
-	public List<CohortM> findCohorts(String nameMatching) {
+	public List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes) {
 		Criteria criteria = (Criteria) getCurrentSession().createCriteria(CohortM.class);
-		criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));
 		criteria.add(Restrictions.eq("voided", false));
+		
+		if(StringUtils.isNotBlank(nameMatching)) {
+			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));
+		}
+		
+		if (attributes != null && !attributes.isEmpty()) {
+			Criteria cri = criteria.createCriteria("attributes", "attr");
+			cri.createAlias("attr.cohortAttributeType", "attrType");
+			cri.add(Restrictions.eq("attr.voided", false));
+			
+			for (String k : attributes.keySet()) {
+				cri.add(Restrictions.eq("attrType.name", k))
+					.add(Restrictions.eq("value", attributes.get(k)));
+			}
+		}
+		
+		System.out.println(toSql(criteria));
+		criteria.setProjection(null).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
 		return criteria.list();
+	}
+	
+	private static String toSql(Criteria criteria) {
+		try {
+			CriteriaImpl c = (CriteriaImpl) criteria;
+			SessionImpl s = (SessionImpl) c.getSession();
+			SessionFactoryImplementor factory = (SessionFactoryImplementor) s.getSessionFactory();
+			String[] implementors = factory.getImplementors(c.getEntityOrClassName());
+			CriteriaLoader loader = new CriteriaLoader((OuterJoinLoadable) factory.getEntityPersister(implementors[0]),
+			        factory, c, implementors[0], s.getLoadQueryInfluencers());
+			
+			Field f = OuterJoinLoader.class.getDeclaredField("sql");
+			f.setAccessible(true);
+			return (String) f.get(loader);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override

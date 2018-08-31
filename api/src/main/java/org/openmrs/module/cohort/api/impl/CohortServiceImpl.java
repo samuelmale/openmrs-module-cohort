@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.commons.logging.Log;
@@ -142,8 +143,8 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	}
 	
 	@Override
-	public List<CohortM> findCohortsMatching(String nameMatching) {
-		return dao.findCohorts(nameMatching);
+	public List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes) {
+		return dao.findCohorts(nameMatching, attributes);
 	}
 	
 	@Override

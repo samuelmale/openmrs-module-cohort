@@ -15,6 +15,7 @@ package org.openmrs.module.cohort.api.db;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.module.cohort.CohortAttribute;
 import org.openmrs.module.cohort.CohortAttributeType;
@@ -110,7 +111,7 @@ public interface CohortDAO {
 	
 	List<CohortM> findCohort(Integer id);
 	List<CohortM> findCohorts();
-	List<CohortM> findCohorts(String cohort_module);
+	List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes);
 	List<CohortM> getCohort(Integer id);
 	List<CohortM> getCohortsByLocationId(Integer id);
 	List<CohortM> getCohortByCohortTypeId(Integer id);

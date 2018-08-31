@@ -16,6 +16,7 @@ package org.openmrs.module.cohort.api;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
@@ -52,7 +53,7 @@ public interface CohortService extends OpenmrsService {
 	CohortM getCohortByUuid(String uuid);
 	CohortM getCohortByName(String name);
 	List<CohortM> getAllCohorts();
-	List<CohortM> findCohortsMatching(String nameMatching);
+	List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes);
 	CohortM saveCohort(CohortM cohort);
 	void purgeCohort(CohortM cohort);
 	CohortM getCohort(Integer loationId, Integer programId, Integer typeId);

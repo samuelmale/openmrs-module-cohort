@@ -1,7 +1,9 @@
 package org.openmrs.module.cohort.web.resource;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.api.CohortService;
@@ -19,6 +21,9 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohort", supportedClass = CohortM.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
 public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 
@@ -35,6 +40,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("endDate");
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
+	            description.addProperty("attributes");
 	            description.addProperty("groupCohort");
 	            description.addProperty("uuid");
 	            description.addSelfLink();
@@ -47,6 +53,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("endDate");
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
+	            description.addProperty("attributes");
 	            description.addProperty("groupCohort");
 	            description.addProperty("uuid");
 				description.addProperty("auditInfo");
@@ -68,7 +75,8 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
         description.addProperty("startDate");
         description.addProperty("endDate");
         description.addRequiredProperty("cohortType");
-        description.addProperty("cohortProgram");
+        description.addProperty("cohortProgram");	            
+        description.addProperty("attributes");
         description.addRequiredProperty("groupCohort");
         
         return description;
@@ -121,7 +129,19 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 
     @Override
     protected PageableResult doSearch(RequestContext context) {
-        List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"));
+        String attributesStr = context.getParameter("attributes");
+        Map<String, String> attributes = null;
+
+        if(StringUtils.isNotBlank(attributesStr)){
+        	try {
+				attributes = new ObjectMapper().readValue("{"+attributesStr+"}", new TypeReference<Map<String, String>>() {});
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("Invalid format for parameter 'attributes'");
+			}
+        }
+
+        List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"), attributes);
         return new NeedsPaging<CohortM>(cohort, context);
     }
 }

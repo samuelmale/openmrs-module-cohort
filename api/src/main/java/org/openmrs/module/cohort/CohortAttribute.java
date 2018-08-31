@@ -1,6 +1,9 @@
 package org.openmrs.module.cohort;
 
+import java.util.Date;
+
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.api.context.Context;
 
 public class CohortAttribute extends BaseOpenmrsData {
 
@@ -41,6 +44,19 @@ public class CohortAttribute extends BaseOpenmrsData {
 	
 	public void setCohortAttributeType(CohortAttributeType cohortAttributeType) {
 		this.cohortAttributeType = cohortAttributeType;
+	}
+	
+	/**
+	 * Convenience method for voiding this attribute
+	 * 
+	 * @param reason
+	 * @should set voided bit to true
+	 */
+	public void voidAttribute(String reason) {
+		setVoided(true);
+		setVoidedBy(Context.getAuthenticatedUser());
+		setVoidReason(reason);
+		setDateVoided(new Date());
 	}
 	
 	@Override
