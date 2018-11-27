@@ -35,6 +35,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cohort.CohortAttribute;
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.openmrs.module.cohort.CohortEncounter;
+import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
 import org.openmrs.module.cohort.CohortObs;
@@ -47,7 +48,7 @@ import org.openmrs.module.cohort.api.db.CohortDAO;
 import org.openmrs.module.cohort.api.db.EncounterSearchCriteriaBuilder;
 
 /**
- * It is a default implementation of {@link cohortService}.
+ * It is a default implementation of {@link CohortService}.
  */
 public class CohortServiceImpl extends BaseOpenmrsService implements CohortService {
 	
@@ -55,14 +56,13 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	private CohortDAO dao;
 	
-	/**
-	 * @param dao the dao to set
-	 */
-	
 	public CohortDAO getDao() {
 		return dao;
 	}
-	
+ 
+	/**
+	 * @param dao the dao to set
+	 */
 	public void setDao(CohortDAO dao) {
 		this.dao = dao;
 	}
@@ -146,7 +146,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	public List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes) {
 		return dao.findCohorts(nameMatching, attributes);
 	}
-	
+ 
 	@Override
 	public CohortAttribute saveCohortAttribute(CohortAttribute att) {
 		return dao.saveCohortAttributes(att);
@@ -394,7 +394,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	public Long getCount(String name) {
 		return dao.getCount(name);
 	}
-	
+ 
 	@Override
 	public CohortObs voidObs(CohortObs obs, String reason) {
 		return dao.saveObs(obs);
@@ -494,6 +494,38 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	public List<CohortVisit> getCohortVisitsByDate(Date startDate, Date endDate) {
 		return dao.getCohortVisitsByDate(startDate, endDate);
 	}
+
+	@Override
+	public CohortLeader getCohortLeaderByUuid(String uuid) {
+		return dao.getCohortLeaderByUuid(uuid);
+	}
+
+	@Override
+	public CohortLeader getCohortLeaderById(Integer id) {
+		return dao.getCohortLeaderById(id);
+	}
+
+	@Override
+	public List<CohortLeader> getCohortLeadersByCohortId(Integer id) {
+		return dao.getCohortLeadersByCohortId(id);
+	}
+
+	@Override
+	public CohortLeader saveCohortLeader(CohortLeader cohortLeader) {
+		return dao.saveCohortLeader(cohortLeader);
+	}
+
+	@Override
+	public CohortLeader voidCohortLeader(CohortLeader cohortLeader, String reason) {
+		return dao.saveCohortLeader(cohortLeader);
+	}
+
+
+	@Override
+	public void purgeCohortLeader(CohortLeader cohortLeader) {
+			dao.purgeCohortLeader(cohortLeader);
+	}
+
 }
 
-	
+ 

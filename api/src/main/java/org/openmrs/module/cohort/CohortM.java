@@ -23,7 +23,8 @@ public class CohortM extends BaseOpenmrsData {
 	private CohortProgram cohortProgram;
 	private List<CohortAttribute> attributes = new ArrayList<CohortAttribute>();
 	private Boolean groupCohort;
-	
+	private List<CohortLeader> cohortLeaders = new ArrayList<CohortLeader>();
+ 
 	public Integer getCohortId() {
 		return cohortId;
 	}
@@ -87,6 +88,47 @@ public class CohortM extends BaseOpenmrsData {
 	public void setCohortProgram(CohortProgram cohortProgram) {
 		this.cohortProgram = cohortProgram;
 	}
+
+    public void setCohortLeaders(List<CohortLeader> leaders) {
+	    this.cohortLeaders = leaders;
+    }
+
+	public List<CohortLeader> getCohortLeaders() {
+	    if(cohortLeaders ==  null) {
+	        cohortLeaders = new ArrayList<>();
+        }
+        return cohortLeaders;
+    }
+
+    public List<CohortLeader> getActiveCohortLeaders() {
+        List<CohortLeader> leaders = new ArrayList<>();
+        for (CohortLeader leader : getCohortLeaders()) {
+            if (!leader.getVoided()) {
+                leaders.add(leader);
+            }
+        }
+        return leaders;
+	}
+	
+	public void addCohortLeader(CohortLeader leader) {
+        leader.setCohort(this);
+
+        for (CohortLeader currentLeader : getActiveCohortLeaders()) {
+            if (currentLeader.equals(leader)) {
+                // if we have the same CohortLeader, don't add the new leader
+                return;
+            }
+        }
+        CohortLeader currentLeader = getActiveCohortLeaders().get(0);
+        // there can only be one active leader at a time
+        currentLeader.setVoided(true);
+        currentLeader.setEndDate(new Date());
+        cohortLeaders.remove(currentLeader);
+        if (!OpenmrsUtil.collectionContains(cohortLeaders, leader)) {
+            cohortLeaders.add(leader);
+        }
+    }
+
 
 	public List<CohortAttribute> getAttributes() {
 		if(attributes == null) {

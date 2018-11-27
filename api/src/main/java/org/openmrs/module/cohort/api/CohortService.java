@@ -27,6 +27,7 @@ import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.cohort.CohortAttribute;
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.openmrs.module.cohort.CohortEncounter;
+import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
 import org.openmrs.module.cohort.CohortObs;
@@ -136,4 +137,11 @@ public interface CohortService extends OpenmrsService {
 	void purgeCohortObs(CohortObs cobs);
 	
 	Long getCount(String name);
+	
+	CohortLeader getCohortLeaderByUuid(String uuid);
+	CohortLeader getCohortLeaderById(Integer id);
+	List<CohortLeader> getCohortLeadersByCohortId(Integer id);
+	CohortLeader saveCohortLeader(CohortLeader cohortLeader);
+	CohortLeader voidCohortLeader(CohortLeader cohortLeader, String reason);
+	void purgeCohortLeader(CohortLeader cohortLeader);
 }

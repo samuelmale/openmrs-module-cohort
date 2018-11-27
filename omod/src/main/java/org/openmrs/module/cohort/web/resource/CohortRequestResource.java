@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.rest.v1_0.resource.CohortRest;
@@ -41,6 +42,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
 	            description.addProperty("attributes");
+	            description.addProperty("cohortLeaders");
 	            description.addProperty("groupCohort");
 	            description.addProperty("uuid");
 	            description.addSelfLink();
@@ -53,6 +55,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("endDate");
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
+	            description.addProperty("cohortLeaders");
 	            description.addProperty("attributes");
 	            description.addProperty("groupCohort");
 	            description.addProperty("uuid");
@@ -78,7 +81,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
         description.addProperty("cohortProgram");	            
         description.addProperty("attributes");
         description.addRequiredProperty("groupCohort");
-        
+
         return description;
     }
     
@@ -89,6 +92,13 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 
     @Override
     public CohortM save(CohortM cohort) {
+        if(cohort.getVoided()) {
+            for(CohortLeader cohortLeader: cohort.getActiveCohortLeaders()) {
+                cohortLeader.setVoided(true);
+                cohortLeader.setVoidReason("Cohort Ended");
+                cohortLeader.setEndDate(cohort.getEndDate());
+            }
+        }
         return Context.getService(CohortService.class).saveCohort(cohort);
     }
 

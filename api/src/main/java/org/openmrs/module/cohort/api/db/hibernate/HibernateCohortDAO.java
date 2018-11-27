@@ -44,6 +44,7 @@ import org.openmrs.api.db.hibernate.PatientSearchCriteria;
 import org.openmrs.module.cohort.CohortAttribute;
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.openmrs.module.cohort.CohortEncounter;
+import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
 import org.openmrs.module.cohort.CohortObs;
@@ -55,7 +56,7 @@ import org.openmrs.module.cohort.api.db.CohortDAO;
 import org.openmrs.module.cohort.api.db.EncounterSearchCriteria;
 
 /**
- * It is a default implementation of  {@link cohortDAO}.
+ * It is a default implementation of  {@link CohortDAO}.
  */
 public class HibernateCohortDAO implements CohortDAO {
 	protected final Log log = LogFactory.getLog(this.getClass());
@@ -88,7 +89,7 @@ public class HibernateCohortDAO implements CohortDAO {
 		criteria.add(Restrictions.ilike("value", name, MatchMode.START));
 		return criteria.list();
 	}
-	
+ 
 	@Override
 	public CohortMember saveCPatient(CohortMember cohort) {
 		getCurrentSession().saveOrUpdate(cohort);
@@ -210,9 +211,9 @@ public class HibernateCohortDAO implements CohortDAO {
 	public List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes) {
 		Criteria criteria = (Criteria) getCurrentSession().createCriteria(CohortM.class);
 		criteria.add(Restrictions.eq("voided", false));
-		
+  
 		if(StringUtils.isNotBlank(nameMatching)) {
-			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));		
+			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));  
 		}
 		
 		if (attributes != null && !attributes.isEmpty()) {
@@ -228,13 +229,13 @@ public class HibernateCohortDAO implements CohortDAO {
 			
 			cri.add(dis);
 		}
-		
+  
 	//	System.out.println(toSql(criteria));
 		criteria.setProjection(null).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return criteria.list();
 	}
-	
+ 
 //	private static String toSql(Criteria criteria) {
 //		try {
 //			CriteriaImpl c = (CriteriaImpl) criteria;
@@ -263,7 +264,37 @@ public class HibernateCohortDAO implements CohortDAO {
 	public void purgeCohortVisit(CohortVisit cvisit) {
 		getCurrentSession().delete(cvisit);
 	}
-	
+ 
+    @Override
+    public CohortLeader getCohortLeaderByUuid(String uuid) {
+        return (CohortLeader) getCurrentSession().createQuery("from CohortLeader t where t.uuid = :uuid").setString("uuid", uuid).uniqueResult();
+    }
+
+    @Override
+    public CohortLeader getCohortLeaderById(Integer id) {
+        return (CohortLeader) getCurrentSession().get(CohortLeader.class, id);
+    }
+
+    @Override
+    public List<CohortLeader> getCohortLeadersByCohortId(Integer id) {
+        return getCurrentSession().createCriteria(CohortLeader.class,"cohortLeader")
+                                 .createAlias("cohortLeader.cohort", "cohort")
+                                 .add(Restrictions.eq("cohort.cohortId", id))
+                                 .add(Restrictions.eq("cohortLeader.voided", false))
+                                  .list();
+    }
+
+    @Override
+    public CohortLeader saveCohortLeader(CohortLeader cohortLeader) {
+        getCurrentSession().saveOrUpdate(cohortLeader);
+        return cohortLeader;
+    }
+
+    @Override
+    public void purgeCohortLeader(CohortLeader cohortLeader) {
+        getCurrentSession().delete(cohortLeader);
+    }
+
 	@Override
 	public List<CohortVisit> findCohortVisitByVisitType(Integer visitType) {
 		Query queryResult = getCurrentSession().createQuery("from CohortVisit");
@@ -817,7 +848,7 @@ public class HibernateCohortDAO implements CohortDAO {
 	public List<CohortM> getCohortByCohortProgramId(Integer id) {
 		return (List<CohortM>) getCurrentSession().createQuery("from CohortM t where t.cohortProgram.cohortProgramId = :id").setString("id", id.toString()).list();
 	}
-	
+ 
 	@Override
 	public List<CohortMember> getCohortMembersByCohortRoleId(Integer id) {
 		return (List<CohortMember>) getCurrentSession().createQuery("from CohortM t where t.role.cohortProgramId = :id").setString("id", id.toString()).list();

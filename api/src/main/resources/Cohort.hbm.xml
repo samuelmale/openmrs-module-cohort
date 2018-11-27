@@ -20,7 +20,10 @@
 			<key column="cohort_id" />
 			<one-to-many class="org.openmrs.module.cohort.CohortAttribute" />
 		</bag >
-
+        <bag name="cohortLeaders" cascade="all">
+            <key column="cohort_id"/>
+            <one-to-many class="org.openmrs.module.cohort.CohortLeader"/>
+        </bag>
         <property name="groupCohort" type="java.lang.Boolean" column="is_group_cohort" length="1" not-null="true"/>
     
         <property name="description" type="java.lang.String"/>
@@ -33,6 +36,6 @@
 		<property name="dateVoided" column="date_voided" type="java.util.Date" />
 		<many-to-one name="voidedBy" column="voided_by" class="org.openmrs.User" />
         <property name="voidReason" type="java.lang.String" column="void_reason"/>
-		
+  
     </class>
 </hibernate-mapping>
