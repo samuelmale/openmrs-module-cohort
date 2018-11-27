@@ -29,6 +29,7 @@ import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.cohort.CohortVisit;
 import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.api.CohortService;
+import org.openmrs.module.cohort.CohortMemberVisit;
 
 /**
  * Database methods for {@link CohortService}.
@@ -152,6 +153,8 @@ public interface CohortDAO {
     CohortLeader getCohortLeaderById(Integer id);
     List<CohortLeader> getCohortLeadersByCohortId(Integer id);
 	CohortLeader saveCohortLeader(CohortLeader cohortLeader);
+    CohortMemberVisit getCohortMemberVisitByUuid(String uuid);
+	CohortMemberVisit saveCohortMemberVisit(CohortMemberVisit cohortMemberVisit);
 
 	Long getCount(String name);
 	void purgeCohort(CohortM cohort);

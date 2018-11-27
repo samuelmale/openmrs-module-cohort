@@ -27,11 +27,11 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
             if (rep instanceof DefaultRepresentation) {
-                description.addProperty("cohort");
                 description.addProperty("visitType");
                 description.addProperty("location");
                 description.addProperty("startDate");
                 description.addProperty("endDate");
+                description.addProperty("cohortMemberVisits");
                 description.addProperty("uuid");
                 description.addSelfLink();
             } 
@@ -41,6 +41,7 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
                 description.addProperty("location");
                 description.addProperty("startDate");
                 description.addProperty("endDate");
+                description.addProperty("cohortMemberVisits");
                 description.addProperty("uuid");
                 description.addProperty("auditInfo");
 	            description.addSelfLink();

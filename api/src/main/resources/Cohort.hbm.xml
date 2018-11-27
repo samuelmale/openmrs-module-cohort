@@ -27,6 +27,10 @@
         <bag name="cohortLeaders" cascade="all">
             <key column="cohort_id"/>
             <one-to-many class="org.openmrs.module.cohort.CohortLeader"/>
+
+        <bag name="cohortVisits" cascade="all" >
+            <key column="cohort_id" />
+            <one-to-many class="org.openmrs.module.cohort.CohortVisit" />
         </bag>
         <property name="groupCohort" type="java.lang.Boolean" column="is_group_cohort" length="1" not-null="true"/>
     

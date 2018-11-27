@@ -55,6 +55,7 @@
         CohortProgram.hbm.xml
         CohortObs.hbm.xml
         CohortLeader.hbm.xml
+        CohortMemberVisit.hbm.xml
     </mappingFiles>
     <!-- Internationalization -->
     <!-- All message codes should start with ${project.parent.artifactId}. -->

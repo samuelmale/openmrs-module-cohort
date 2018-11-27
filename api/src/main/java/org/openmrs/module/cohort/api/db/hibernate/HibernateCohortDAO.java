@@ -47,6 +47,7 @@ import org.openmrs.module.cohort.CohortEncounter;
 import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
+import org.openmrs.module.cohort.CohortMemberVisit;
 import org.openmrs.module.cohort.CohortObs;
 import org.openmrs.module.cohort.CohortProgram;
 import org.openmrs.module.cohort.CohortRole;
@@ -292,7 +293,18 @@ public class HibernateCohortDAO implements CohortDAO {
 
     @Override
     public void purgeCohortLeader(CohortLeader cohortLeader) {
-        getCurrentSession().delete(cohortLeader);
+		getCurrentSession().delete(cohortLeader);
+	}
+	
+    @Override
+    public CohortMemberVisit getCohortMemberVisitByUuid(String uuid) {
+        return (CohortMemberVisit) getCurrentSession().createQuery("from CohortMemberVisit t where t.uuid = :uuid").setString("uuid", uuid).uniqueResult();
+    }
+
+    @Override
+    public CohortMemberVisit saveCohortMemberVisit(CohortMemberVisit cohortMemberVisit) {
+        getCurrentSession().saveOrUpdate(cohortMemberVisit);
+        return cohortMemberVisit;
     }
 
 	@Override

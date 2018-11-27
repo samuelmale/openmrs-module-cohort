@@ -2,6 +2,8 @@ package org.openmrs.module.cohort;
 
 
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Location;
@@ -16,7 +18,8 @@ public class CohortVisit extends BaseOpenmrsData {
 	private Location location;
 	private Date startDate;
 	private Date endDate;
-	
+	private List<CohortMemberVisit> cohortMemberVisits = new ArrayList<CohortMemberVisit>();
+ 
 	public Integer getCohortVisitId() {
 		return cohortVisitId;
 	}
@@ -74,7 +77,19 @@ public class CohortVisit extends BaseOpenmrsData {
 	public void setId(Integer id) {
 		setCohortVisitId(id);
 	}
+
+	public void addMemberVisit(CohortMemberVisit cohortMemberVisit) {
+		this.cohortMemberVisits.add(cohortMemberVisit);
+	}
+
+	public List<CohortMemberVisit> getCohortMemberVisits() {
+		if (cohortMemberVisits == null) {
+			cohortMemberVisits = new ArrayList<CohortMemberVisit>();
+		}
+		return this.cohortMemberVisits;
+	}
+
+	public void setCohortMemberVisits(List<CohortMemberVisit> cohortMemberVisits) {
+		this.cohortMemberVisits = cohortMemberVisits;
+	}
 }
-	
-	
-	

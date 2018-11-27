@@ -30,6 +30,7 @@ import org.openmrs.module.cohort.CohortEncounter;
 import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
+import org.openmrs.module.cohort.CohortMemberVisit;
 import org.openmrs.module.cohort.CohortObs;
 import org.openmrs.module.cohort.CohortProgram;
 import org.openmrs.module.cohort.CohortRole;
@@ -144,4 +145,7 @@ public interface CohortService extends OpenmrsService {
 	CohortLeader saveCohortLeader(CohortLeader cohortLeader);
 	CohortLeader voidCohortLeader(CohortLeader cohortLeader, String reason);
 	void purgeCohortLeader(CohortLeader cohortLeader);
+
+	CohortMemberVisit getCohortMemberVisitByUuid(String uuid);
+	CohortMemberVisit saveCohortMemberVisit(CohortMemberVisit cohortMemberVisit);
 }
