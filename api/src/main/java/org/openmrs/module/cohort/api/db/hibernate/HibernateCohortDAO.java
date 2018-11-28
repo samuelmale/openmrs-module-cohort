@@ -209,12 +209,11 @@ public class HibernateCohortDAO implements CohortDAO {
 	}
 	
 	@Override
-	public List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes) {
+	public List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes, CohortType cohortType) {
 		Criteria criteria = (Criteria) getCurrentSession().createCriteria(CohortM.class);
-		criteria.add(Restrictions.eq("voided", false));
-  
+		
 		if(StringUtils.isNotBlank(nameMatching)) {
-			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.START));  
+			criteria.add(Restrictions.ilike("name", nameMatching, MatchMode.ANYWHERE));
 		}
 		
 		if (attributes != null && !attributes.isEmpty()) {
@@ -231,6 +230,10 @@ public class HibernateCohortDAO implements CohortDAO {
 			cri.add(dis);
 		}
   
+		if (cohortType != null) {
+			criteria.add(Restrictions.eq("cohortType.cohortTypeId", cohortType.getCohortTypeId()));
+		}
+
 	//	System.out.println(toSql(criteria));
 		criteria.setProjection(null).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
