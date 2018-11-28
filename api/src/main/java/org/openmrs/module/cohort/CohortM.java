@@ -25,6 +25,8 @@ public class CohortM extends BaseOpenmrsData {
 	private Boolean groupCohort;
 	private List<CohortLeader> cohortLeaders = new ArrayList<CohortLeader>();
  
+	private List<CohortMember> cohortMembers = new ArrayList<CohortMember>();
+	
 	public Integer getCohortId() {
 		return cohortId;
 	}
@@ -129,6 +131,38 @@ public class CohortM extends BaseOpenmrsData {
         }
     }
 
+    public void setCohortMembers(List<CohortMember> cohortMembers) {
+        this.cohortMembers = cohortMembers;
+    }
+
+    public List<CohortMember> getCohortMembers() {
+	    if(cohortMembers == null) {
+	        cohortMembers = new ArrayList<>();
+        }
+        return cohortMembers;
+    }
+
+    public List<CohortMember> getActiveCohortMembers() {
+        List<CohortMember> members = new ArrayList<>();
+        for (CohortMember member : getCohortMembers()) {
+            if (!member.getVoided()) {
+                members.add(member);
+            }
+        }
+        return members;
+    }
+	
+
+    public CohortMember getMember(String uuid) {
+        if (uuid != null) {
+            for (CohortMember member : getCohortMembers()) {
+                if (uuid.equals(member.getUuid())  && !member.getVoided()) {
+                    return member;
+                }
+            }
+        }
+        return null;
+	}
 
 	public List<CohortAttribute> getAttributes() {
 		if(attributes == null) {
