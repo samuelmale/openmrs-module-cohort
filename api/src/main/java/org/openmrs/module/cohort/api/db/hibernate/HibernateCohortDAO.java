@@ -311,6 +311,11 @@ public class HibernateCohortDAO implements CohortDAO {
     }
 
 	@Override
+	public List<CohortMember> getCohortMembersByPatientId(int patientId) {
+		return (List<CohortMember>) getCurrentSession().createQuery("from CohortMember t where t.patient.patientId = :id").setInteger("id", patientId).list();
+	}
+
+	@Override
 	public List<CohortVisit> findCohortVisitByVisitType(Integer visitType) {
 		Query queryResult = getCurrentSession().createQuery("from CohortVisit");
 		return queryResult.list();
@@ -707,7 +712,7 @@ public class HibernateCohortDAO implements CohortDAO {
 		Session session = getCurrentSession();
 		/*Criteria criteria=(Criteria) getCurrentSession().createCriteria(Person.class);
     	criteria.add(Restrictions.ilike("names",name, MatchMode.START));*/
-		Query queryResult = session.createQuery("from CohortMember where person=(select personId from Person where names='" + name + "'");
+		Query queryResult = session.createQuery("from CohortMember where patient=(select patientId from Person where names='" + name + "'");
 		cohort = queryResult.list();
 		return cohort;
 	}

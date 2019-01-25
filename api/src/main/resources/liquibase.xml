@@ -378,7 +378,7 @@
 	<changeSet id="cohort_member1065" author="sharon">
 		<preConditions onFail="MARK_RAN">
 			<not>
-				<tableExists tableName="cohort_member" />
+				<columnExists tableName="cohort_member" columnName="cohort_role_id" />
 			</not>
 		</preConditions>
 		<createTable tableName="cohort_member">
@@ -421,6 +421,48 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
+		<comment>Creating a cohort_role_id column</comment>
+		<addColumn tableName="cohort_member">
+			<column name="cohort_role_id" type="int(11)">
+				<constraints foreignKeyName="cohortmemberrole_fk" references="cohort_role(cohort_role_id)"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="cohort_member1065_date_changed" author="fali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="cohort_member" columnName="date_changed" />
+			</not>
+		</preConditions>
+		<comment>Creating a date_changed column</comment>
+		<addColumn tableName="cohort_member">
+			<column name="date_changed" type="date">
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="cohort_member1065_changed_by" author="fali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="cohort_member" columnName="changed_by" />
+			</not>
+		</preConditions>
+		<comment>Creating a changed_by column</comment>
+		<addColumn tableName="cohort_member">
+			<column name="changed_by" type="int(11)">
+			<constraints foreignKeyName="cohortmemberchangedby_fk" references="users(user_id)"/>
+		</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="cohort_member1065_is_head" author="fali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="cohort_member" columnName="is_head" />
+			</not>
+		</preConditions>
+		<comment>Creating a is_head column</comment>
+		<addColumn tableName="cohort_member">
+			<column name="is_head" type="boolean" defaultValue="null"/>
+		</addColumn>
 	</changeSet>
 	<changeSet id="cohortobs1065" author="sharon">
 		<preConditions onFail="MARK_RAN">
