@@ -16,7 +16,10 @@
                      column="location_id" not-null="true" cascade="all"/>
         <property name="startDate" column="start_date" type="java.util.Date"/>
         <property name="endDate" column="end_date" type="java.util.Date"/>
-        
+        <bag name="cohortMemberVisits" cascade="all" >
+            <key column="cohort_visit_id" />
+            <one-to-many class="org.openmrs.module.cohort.CohortMemberVisit" />
+        </bag>
         <property name="uuid" type="java.lang.String" length="38" unique="true"/>
     	<property name="dateCreated" column="date_created" type="java.util.Date" not-null="true"/>
 		<many-to-one name="creator" column ="creator" class="org.openmrs.User" not-null="true"/>

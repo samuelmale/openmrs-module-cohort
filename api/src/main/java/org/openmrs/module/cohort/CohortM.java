@@ -26,6 +26,7 @@ public class CohortM extends BaseOpenmrsData {
 	private List<CohortLeader> cohortLeaders = new ArrayList<CohortLeader>();
  
 	private List<CohortMember> cohortMembers = new ArrayList<CohortMember>();
+    private List<CohortVisit> cohortVisits = new ArrayList<CohortVisit>();
 	
 	public Integer getCohortId() {
 		return cohortId;
@@ -163,6 +164,17 @@ public class CohortM extends BaseOpenmrsData {
         }
         return null;
 	}
+
+    public List<CohortVisit> getCohortVisits() {
+        if(cohortVisits == null) {
+            cohortVisits = new ArrayList<>();
+        }
+        return cohortVisits;
+    }
+
+    public void setCohortVisits(List<CohortVisit> cohortVisits) {
+        this.cohortVisits = cohortVisits;
+    }
 
 	public List<CohortAttribute> getAttributes() {
 		if(attributes == null) {
