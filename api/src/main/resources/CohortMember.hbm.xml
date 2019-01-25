@@ -13,10 +13,10 @@
         <many-to-one name="cohort" class="org.openmrs.module.cohort.CohortM"
                     column="cohort_id" not-null="true" cascade="all"/>
         <many-to-one name="role" class="org.openmrs.module.cohort.CohortRole" 
-        			column="cohort_role_id" not-null="true" cascade="all"/>
+        			column="cohort_role_id" cascade="all"/>
         <property name="startDate" column="start_date" type="java.util.Date"/>
         <property name="endDate" column="end_date" type="java.util.Date"/>
-        <property name="head" column="is_head" type="java.lang.Boolean" length="1" not-null="true"/>
+        <property name="head" column="is_head" type="java.lang.Boolean" length="1"/>
         
         <property name="uuid" type="java.lang.String" length="38" unique="true"/>
     	<property name="dateCreated" column="date_created" type="java.util.Date" not-null="true"/>

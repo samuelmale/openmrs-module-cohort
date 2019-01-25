@@ -100,6 +100,7 @@ public interface CohortDAO {
 	CohortVisit saveCohortVisit(CohortVisit cvisit);
 	
 	CohortAttribute findCohortAtt(Integer id);
+	List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeTypeId);
 	List<CohortAttribute> findCohortAttribute(String name);
 
 	CohortAttributeType findCohortAttributeType(Integer id);
@@ -167,6 +168,6 @@ public interface CohortDAO {
 	void purgeCohortProgram(CohortProgram cvisit);
 	void purgeCohortRole(CohortRole crole);
 	void purgeCohortType(CohortType cohort);
-	void purgeCohortVisit(CohortVisit cvisit);	
+	void purgeCohortVisit(CohortVisit cvisit); 
     void purgeCohortLeader(CohortLeader cohortLeader);
 }

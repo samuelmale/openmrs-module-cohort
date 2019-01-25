@@ -24,7 +24,7 @@ public class CohortM extends BaseOpenmrsData {
 	private List<CohortAttribute> attributes = new ArrayList<CohortAttribute>();
 	private Boolean groupCohort;
 	private List<CohortLeader> cohortLeaders = new ArrayList<CohortLeader>();
- 
+
 	private List<CohortMember> cohortMembers = new ArrayList<CohortMember>();
     private List<CohortVisit> cohortVisits = new ArrayList<CohortVisit>();
 	
@@ -92,6 +92,29 @@ public class CohortM extends BaseOpenmrsData {
 		this.cohortProgram = cohortProgram;
 	}
 
+    public void setCohortMembers(List<CohortMember> cohortMembers) {
+        this.cohortMembers = cohortMembers;
+    }
+
+    public List<CohortMember> getCohortMembers() {
+	    if(cohortMembers == null) {
+	        cohortMembers = new ArrayList<>();
+        }
+        return cohortMembers;
+    }
+    public List<CohortVisit> getCohortVisits() {
+        if(cohortVisits == null) {
+            cohortVisits = new ArrayList<>();
+        }
+        return cohortVisits;
+    }
+
+    public void setCohortVisits(List<CohortVisit> cohortVisits) {
+        this.cohortVisits = cohortVisits;
+    }
+    public void setCohortLeaders(List<CohortLeader> leaders) {
+	    this.cohortLeaders = leaders;
+    }
 
     public List<CohortMember> getActiveCohortMembers() {
         List<CohortMember> members = new ArrayList<>();
@@ -101,12 +124,7 @@ public class CohortM extends BaseOpenmrsData {
             }
         }
         return members;
-	}
-
-    public void setCohortLeaders(List<CohortLeader> leaders) {
-	    this.cohortLeaders = leaders;
     }
-
 	public List<CohortLeader> getCohortLeaders() {
 	    if(cohortLeaders ==  null) {
 	        cohortLeaders = new ArrayList<>();
@@ -122,9 +140,16 @@ public class CohortM extends BaseOpenmrsData {
             }
         }
         return leaders;
+    }
+
+	public List<CohortAttribute> getAttributes() {
+		if(attributes == null) {
+			attributes = new ArrayList<>();
+		}
+		return attributes;
 	}
 
-	public void addCohortLeader(CohortLeader leader) {
+    public void addCohortLeader(CohortLeader leader) {
         leader.setCohort(this);
 
         for (CohortLeader currentLeader : getActiveCohortLeaders()) {
@@ -143,26 +168,6 @@ public class CohortM extends BaseOpenmrsData {
         }
     }
 
-    public void setCohortMembers(List<CohortMember> cohortMembers) {
-        this.cohortMembers = cohortMembers;
-    }
-
-    public List<CohortMember> getCohortMembers() {
-	    if(cohortMembers == null) {
-	        cohortMembers = new ArrayList<>();
-        }
-        return cohortMembers;
-    }
-
-
-
-	public List<CohortAttribute> getAttributes() {
-		if(attributes == null) {
-			attributes = new ArrayList<>();
-		}
-		return attributes;
-	}
-
     public CohortMember getMember(String uuid) {
         if (uuid != null) {
             for (CohortMember member : getCohortMembers()) {
@@ -172,19 +177,7 @@ public class CohortM extends BaseOpenmrsData {
             }
         }
         return null;
-	}
-
-    public List<CohortVisit> getCohortVisits() {
-        if(cohortVisits == null) {
-            cohortVisits = new ArrayList<>();
-        }
-        return cohortVisits;
     }
-
-    public void setCohortVisits(List<CohortVisit> cohortVisits) {
-        this.cohortVisits = cohortVisits;
-    }
-
 
 	public void setAttributes(List<CohortAttribute> attributes) {
 		this.attributes = attributes;

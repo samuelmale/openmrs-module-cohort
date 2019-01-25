@@ -119,8 +119,13 @@ public class CohortAttributesRequestResource extends DataDelegatingCrudResource<
     			attributeId = attTypeo.getCohortAttributeTypeId();
     		}
     	}
-    	
-    	List<CohortAttribute> list = Context.getService(CohortService.class).findCohortAttributes(cohorto.getCohortId(), attributeId);
-		return new NeedsPaging<CohortAttribute>(list, context);
+
+    	    if(cohorto != null) {
+                List<CohortAttribute> list = Context.getService(CohortService.class).findCohortAttributes(cohorto.getCohortId(), attributeId);
+                return new NeedsPaging<CohortAttribute>(list, context);
+    	    } else {
+                List<CohortAttribute> list = Context.getService(CohortService.class).getCohortAttributesByAttributeType(attributeId);
+                return new NeedsPaging<CohortAttribute>(list, context);
+            }
     }
 }

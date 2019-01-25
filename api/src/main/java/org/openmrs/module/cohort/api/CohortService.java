@@ -58,8 +58,7 @@ public interface CohortService extends OpenmrsService {
 	List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes, CohortType cohortType);
 	CohortM saveCohort(CohortM cohort);
 	void purgeCohort(CohortM cohort);
-	CohortM getCohort(Integer loationId, Integer programId, Integer typeId);
-	List<CohortM> getCohortsByLocationId(int locationId);
+	CohortM getCohort(Integer locationId, Integer programId, Integer typeId);
 	
 	CohortMember getCohortMemberByUuid(String uuid);
 	List<CohortMember> findCohortMemberByName(String name);
@@ -150,4 +149,9 @@ public interface CohortService extends OpenmrsService {
 
 	CohortMemberVisit getCohortMemberVisitByUuid(String uuid);
 	CohortMemberVisit saveCohortMemberVisit(CohortMemberVisit cohortMemberVisit);
+
+
+    List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeId);
+
+	List<CohortM> getCohortsByLocationId(int locationId);
 }
