@@ -1,13 +1,17 @@
 package org.openmrs.module.cohort.web.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openmrs.Location;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortLeader;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
+import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.rest.v1_0.resource.CohortRest;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -115,7 +119,6 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
         description.addProperty("voidReason");
         return description;
     }
-
     @Override
     public CohortM save(CohortM cohort) {
         if(cohort.getVoided()) {
@@ -174,7 +177,11 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
     @Override
     protected PageableResult doSearch(RequestContext context) {
         String attributesStr = context.getParameter("attributes");
+        String cohortType = context.getParameter("cohortType");
+        String location = context.getParameter("location");
+
         Map<String, String> attributes = null;
+        CohortType type = null;
 
         if(StringUtils.isNotBlank(attributesStr)){
         	try {
@@ -184,8 +191,29 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 				throw new RuntimeException("Invalid format for parameter 'attributes'");
 			}
         }
+        if(StringUtils.isNotBlank(cohortType)) {
+            type  = Context.getService(CohortService.class).getCohortTypeByName(cohortType);
+            if (type == null) {
+                type = Context.getService(CohortService.class).getCohortTypeByUuid(cohortType);
+            }
+            if (type == null) {
+                throw new RuntimeException("No Cohort Type By Name/Uuid Found Matching The Supplied Parameter");
+            }
+        }
 
-        List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"), attributes);
-        return new NeedsPaging<CohortM>(cohort, context);
+        if(StringUtils.isNotBlank(location)) {
+            Location cohortLocation = Context.getService(LocationService.class).getLocationByUuid(location);
+            if(cohortLocation == null) {
+                throw new RuntimeException("No Location found for that uuid");
+            } else {
+                int locationId = cohortLocation.getLocationId();
+                List<CohortM> cohorts = Context.getService(CohortService.class).getCohortsByLocationId(locationId);
+                return new NeedsPaging<CohortM>(cohorts, context);
+            }
+        }
+
+            List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"), attributes, type);
+            return new NeedsPaging<CohortM>(cohort, context);
+
     }
 }
