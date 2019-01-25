@@ -92,9 +92,9 @@ public class HibernateCohortDAO implements CohortDAO {
 	}
  
 	@Override
-	public CohortMember saveCPatient(CohortMember cohort) {
-		getCurrentSession().saveOrUpdate(cohort);
-		return cohort;
+	public CohortMember saveCPatient(CohortMember cohortMember) {
+		getCurrentSession().saveOrUpdate(cohortMember);
+		return cohortMember;
 	}
 	
 	@Override
@@ -313,6 +313,12 @@ public class HibernateCohortDAO implements CohortDAO {
 	@Override
 	public List<CohortMember> getCohortMembersByPatientId(int patientId) {
 		return (List<CohortMember>) getCurrentSession().createQuery("from CohortMember t where t.patient.patientId = :id").setInteger("id", patientId).list();
+	}
+
+	@Override
+	public List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeTypeId) {
+		return (List<CohortAttribute>) getCurrentSession().createQuery("from CohortAttribute t where t.cohortAttributeType.cohortAttributeTypeId = :attributeTypeId")
+				.setInteger("attributeTypeId", attributeTypeId).list();
 	}
 
 	@Override
