@@ -69,6 +69,7 @@ public interface CohortService extends OpenmrsService {
 	List<CohortMember> getCohortMembersByCohortRoleId(Integer id);
 	List<CohortMember> getAllHeadCohortMembers();
 	CohortMember saveCohortMember(CohortMember cohortmember);
+	List<CohortMember> findCohortMembersByPatient(int patientId);
 
 	CohortAttributeType getCohortAttributeType(Integer id);
 	List<CohortAttributeType> getAllCohortAttributeTypes();

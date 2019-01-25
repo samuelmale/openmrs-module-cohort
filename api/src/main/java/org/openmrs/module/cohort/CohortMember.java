@@ -3,39 +3,41 @@ package org.openmrs.module.cohort;
 import java.util.Date;
 
 import org.openmrs.BaseOpenmrsData;
-import org.openmrs.Person;
+import org.openmrs.Patient;
 
 
 public class CohortMember extends BaseOpenmrsData {
 	
 	private static final long serialVersionUID = 1L;
 	private Integer cohortMemberId;
-	private Person person;
-	private Integer personId;
+	private Patient patient;
+	private Integer patientId;
 	private CohortM cohort;
 	private CohortRole role;
 	private Date startDate;
 	private Date endDate;
-	private boolean head;
+	private Boolean head;
 	
-	public boolean isHead() {
+	public Boolean isHead() {
 		return head;
 	}
 	
-	public void setHead(boolean head) {
+	public void setHead(Boolean head) {
 		this.head = head;
 	}
-	
+	public Boolean getHead() {
+		return head;
+	}
+
 	public CohortMember() {
 		
 	}
 	
-	public CohortMember(Person person) {
-		person = new Person();
-		if (person != null) {
-			this.personId = person.getPersonId();
-			if (person.getUuid() != null) {
-				this.setUuid(person.getUuid());
+	public CohortMember(Patient patient) {
+		if (patient != null) {
+			this.patientId = patient.getPatientId();
+			if (patient.getUuid() != null) {
+				this.setUuid(patient.getUuid());
 			}
 		}
 	}
@@ -74,12 +76,12 @@ public class CohortMember extends BaseOpenmrsData {
 		this.cohortMemberId = cohortMemberId;
 	}
 	
-	public Person getPerson() {
-		return person;
+	public Patient getPatient() {
+		return patient;
 	}
 	
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 	
 	public CohortM getCohort() {

@@ -128,6 +128,7 @@ public interface CohortDAO {
 	CohortMember getCohortMember(Integer id);
 	List<CohortMember> getAllHeadCohortMembers();
 	List<CohortMember> getCohortMembersByCohortRoleId(Integer id);
+	List<CohortMember> getCohortMembersByPatientId(int patientId);
  
 	List<CohortObs> findCohortObs();
 	CohortObs findCohortObs(Integer id);

@@ -30,9 +30,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohort",
-        supportedClass = CohortM.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohort", supportedClass = CohortM.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
 public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 
     @Override
@@ -127,15 +125,13 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
                 cohortLeader.setVoidReason("Cohort Ended");
                 cohortLeader.setEndDate(cohort.getEndDate());
             }
-        // end memberships if cohort is voided
-        if(cohort.getVoided()) {
+            //end memberships if cohort is voided.
             for(CohortMember cohortMember: cohort.getCohortMembers()) {
                 cohortMember.setVoided(true);
                 cohortMember.setVoidReason("Cohort Ended");
                 cohortMember.setEndDate(cohort.getEndDate());
                 }
             }
-        }
         return Context.getService(CohortService.class).saveCohort(cohort);
     }
 

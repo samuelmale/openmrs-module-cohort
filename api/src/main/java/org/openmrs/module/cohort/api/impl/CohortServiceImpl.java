@@ -142,7 +142,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	public List<CohortM> getAllCohorts() {
 		return dao.findCohorts();
 	}
-	
+ 
 	@Override
 	public List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes, CohortType cohortType) {
 		return dao.findCohorts(nameMatching, attributes, cohortType);
@@ -531,6 +531,10 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	public CohortMemberVisit getCohortMemberVisitByUuid(String uuid) {
 		return dao.getCohortMemberVisitByUuid(uuid);
 	}
+	public List<CohortMember> findCohortMembersByPatient(int patientId) {
+		return dao.getCohortMembersByPatientId(patientId);
+	}
+
 
 	@Override
 	public CohortMemberVisit saveCohortMemberVisit(CohortMemberVisit cohortMemberVisit) {
