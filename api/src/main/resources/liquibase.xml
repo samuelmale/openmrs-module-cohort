@@ -372,59 +372,6 @@
 			</column>
         </createTable>
     </changeSet>
-	<changeSet id="cohort_member1065" author="sharon">
-		<preConditions onFail="MARK_RAN">
-			<not>
-				<columnExists tableName="cohort_member" columnName="cohort_role_id" />
-			</not>
-		</preConditions>
-		<createTable tableName="cohort_member">
-			<column name="cohort_member_id" autoIncrement="true" type="int(11)">
-				<constraints nullable="false" primaryKey="true" />
-			</column>
-			<column name="person_id" type="int(11)">
-				<constraints nullable="false" foreignKeyName="cohortmemberperson_fk" references="person(person_id)" />
-			</column>
-			<column name="cohort_role_id" type="int(11)">
-				<constraints foreignKeyName="cohortmemberrole_fk" references="cohort_role(cohort_role_id)" />
-			</column>
-			<column name="cohort_id" type="int(11)">
-				<constraints foreignKeyName="cohortmembercohort_fk_module" references="cohort(cohort_id)" />
-			</column>
-			<column name="start_date" type="datetime" />
-			<column name="end_date" type="datetime" />
-			<column name="is_head" type="tinyint(1)">
-				<constraints nullable="false" />
-			</column>
-			<column name="date_created" type="datetime">
-				<constraints nullable="false" />
-			</column>
-			<column name="creator" type="int(11)">
-				<constraints nullable="false" foreignKeyName="cohortmembercreator_fk" references="users(user_id)" />
-			</column>
-			<column name="changed_by" type="int(11)">
-				<constraints foreignKeyName="cohortmembereditor_fk" references="users(user_id)" />
-			</column>
-			<column name="date_changed" type="datetime" />
-			<column name="voided" type="tinyint(1)" defaultValueBoolean="false">
-				<constraints nullable="false" />
-			</column>
-			<column name="voided_by" type="int(11)">
-				<constraints foreignKeyName="cohortmembervoider_fk" references="users(user_id)" />
-			</column>
-			<column name="date_voided" type="datetime" />
-			<column name="void_reason" type="varchar(255)" />
-			<column name="uuid" type="varchar(255)">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-		<comment>Creating a cohort_role_id column</comment>
-		<addColumn tableName="cohort_member">
-			<column name="cohort_role_id" type="int(11)">
-				<constraints foreignKeyName="cohortmemberrole_fk" references="cohort_role(cohort_role_id)"/>
-			</column>
-		</addColumn>
-	</changeSet>
 	<changeSet id="cohort_member1065_date_changed" author="fali">
 		<preConditions onFail="MARK_RAN">
 			<not>

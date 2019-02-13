@@ -46,13 +46,8 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("location");
 	            description.addProperty("startDate");
 	            description.addProperty("endDate");
-	            description.addProperty("cohortType");
-	            description.addProperty("cohortProgram");
 	            description.addProperty("attributes");
-	            description.addProperty("cohortLeaders");
-	            description.addProperty("cohortMembers");
 	            description.addProperty("groupCohort");
-                description.addProperty("cohortVisits");
 	            description.addProperty("uuid");
 	            description.addProperty("voided");
                 description.addProperty("voidReason");
@@ -69,7 +64,7 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("cohortLeaders");
 	            description.addProperty("attributes");
 	            description.addProperty("groupCohort");
-	            description.addProperty("cohortMembers");
+	            description.addProperty("cohortMembers", Representation.FULL);
                 description.addProperty("voided");
                 description.addProperty("voidReason");
                 description.addProperty("cohortVisits");
