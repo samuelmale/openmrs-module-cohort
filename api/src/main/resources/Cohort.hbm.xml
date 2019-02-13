@@ -27,6 +27,7 @@
         <bag name="cohortLeaders" cascade="all">
             <key column="cohort_id"/>
             <one-to-many class="org.openmrs.module.cohort.CohortLeader"/>
+        </bag>
 
         <bag name="cohortVisits" cascade="all" >
             <key column="cohort_id" />

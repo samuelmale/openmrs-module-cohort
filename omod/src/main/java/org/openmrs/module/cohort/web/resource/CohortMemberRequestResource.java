@@ -1,6 +1,10 @@
 package org.openmrs.module.cohort.web.resource;
 
 import java.util.List;
+import java.util.ArrayList;
+
+
+import org.apache.commons.lang3.StringUtils;
 
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
@@ -35,18 +39,19 @@ public class CohortMemberRequestResource extends DataDelegatingCrudResource<Coho
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
             if (rep instanceof DefaultRepresentation) {
-                description.addProperty("patient", Representation.FULL);
+                description.addProperty("patient", Representation.REF);
                 description.addProperty("role");
                 description.addProperty("startDate");
                 description.addProperty("endDate");
                 description.addProperty("head");
                 description.addProperty("uuid");
                 description.addProperty("voided");
+                description.addProperty("cohort", Representation.DEFAULT);
                 description.addSelfLink();
             } 
             else if (rep instanceof FullRepresentation) {
             	description.addProperty("patient", Representation.FULL);
-                description.addProperty("cohort");
+                description.addProperty("cohort", Representation.DEFAULT);
                 description.addProperty("role");
                 description.addProperty("startDate");
                 description.addProperty("endDate");
@@ -131,22 +136,34 @@ public class CohortMemberRequestResource extends DataDelegatingCrudResource<Coho
     protected PageableResult doSearch(RequestContext context) {
     	String cohort = context.getParameter("cohort");
         String patientUuid = context.getParameter("patient");
+        List<CohortMember> list = new ArrayList<CohortMember>();
 
-    	CohortM cohorto = Context.getService(CohortService.class).getCohortByName(cohort);
-        Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+        if(StringUtils.isNotBlank(cohort) && StringUtils.isNotBlank(patientUuid)){
+            throw new IllegalArgumentException("Patient and Cohort Parameters can't both be declared in the url, search by either cohort or patient, not both");
 
-    	if(cohorto == null) {
-    		cohorto = Context.getService(CohortService.class).getCohortByUuid(cohort);
-    	}
-    	
-    	if(cohorto == null && patient == null) {
-    		throw new IllegalArgumentException("No valid value specified for param cohort and/or patientUuid");
-    	} else if(cohorto != null) {
-            List<CohortMember> list = Context.getService(CohortService.class).findCohortMembersByCohort(cohorto.getCohortId());
-            return new NeedsPaging<CohortMember>(list, context);
+        } else if(StringUtils.isNotBlank(cohort)) {
+            CohortM cohorto = Context.getService(CohortService.class).getCohortByName(cohort);
+            if(cohorto == null) {
+                // check by uuid
+                cohorto = Context.getService(CohortService.class).getCohortByUuid(cohort);
+            }
+            if(cohorto == null) {
+                throw new IllegalArgumentException("No match found in cohort");
+            }
+            list = Context.getService(CohortService.class).findCohortMembersByCohort(cohorto.getCohortId());
+
+        } else if (StringUtils.isNotBlank(patientUuid)) {
+            Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+            if(patient == null) {
+                throw new IllegalArgumentException("No patient with uuid " + patientUuid);
+            }
+            list= Context.getService(CohortService.class).findCohortMembersByPatient(patient.getId());
+
         } else {
-    	    List<CohortMember> list= Context.getService(CohortService.class).findCohortMembersByPatient(patient.getId());
-    	    return new NeedsPaging<CohortMember>(list, context);
+            throw new IllegalArgumentException("No valid value specified for param cohort and/or patient");
         }
+
+    	return new NeedsPaging<CohortMember>(list, context);
+
     };
 }
