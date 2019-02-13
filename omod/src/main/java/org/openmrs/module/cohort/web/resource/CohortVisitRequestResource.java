@@ -10,39 +10,41 @@ import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/testcohortvisit", supportedClass = CohortVisit.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*, 1.10.*, 1.11.*", "1.12.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortvisit", supportedClass = CohortVisit.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
 public class CohortVisitRequestResource extends DataDelegatingCrudResource<CohortVisit> {
 
     @Override
-    public DelegatingResourceDescription getRepresentationDescription(
-            Representation rep) {
+    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 
         DelegatingResourceDescription description = null;
 
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
             if (rep instanceof DefaultRepresentation) {
-                description.addProperty("cohortVisitId");
-                description.addProperty("name");
+                description.addProperty("visitType");
+                description.addProperty("location");
+                description.addProperty("startDate");
+                description.addProperty("endDate");
+                description.addProperty("cohortMemberVisits");
+                description.addProperty("uuid");
+                description.addSelfLink();
+            } 
+            else if (rep instanceof FullRepresentation) {
                 description.addProperty("cohort");
                 description.addProperty("visitType");
                 description.addProperty("location");
                 description.addProperty("startDate");
                 description.addProperty("endDate");
+                description.addProperty("cohortMemberVisits");
                 description.addProperty("uuid");
-            } else if (rep instanceof FullRepresentation) {
-                description.addProperty("cohortVisitId");
-                description.addProperty("name");
-                description.addProperty("cohort");
-                description.addProperty("visitType");
-                description.addProperty("location");
-                description.addProperty("startDate");
-                description.addProperty("endDate");
-                description.addProperty("uuid");
+                description.addProperty("auditInfo");
+	            description.addSelfLink();
             }
         }
         return description;
@@ -51,29 +53,34 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addRequiredProperty("cohortVisitId");
-        description.addProperty("cohort");
-        description.addProperty("visitType");
+        description.addRequiredProperty("cohort");
+        description.addRequiredProperty("visitType");
+        description.addRequiredProperty("location");
+        description.addRequiredProperty("startDate");
+        description.addProperty("endDate");
         return description;
     }
-
+    
     @Override
-    public CohortVisit save(CohortVisit arg0) {
-        return Context.getService(CohortService.class).saveCohortVisit(arg0);
+    public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
+    	return getCreatableProperties();
     }
 
     @Override
-    protected void delete(CohortVisit arg0, String arg1, RequestContext arg2)
-            throws ResponseException {
-        Context.getService(CohortService.class).purgeCohortVisit(arg0);
-
+    public CohortVisit save(CohortVisit cohortVisit) {
+        return Context.getService(CohortService.class).saveCohortVisit(cohortVisit);
     }
 
     @Override
-    public void purge(CohortVisit arg0, RequestContext arg1)
-            throws ResponseException {
-        // TODO Auto-generated method stub
+    protected void delete(CohortVisit cohortVisit, String reason, RequestContext context) throws ResponseException {
+    	cohortVisit.setVoided(true);
+    	cohortVisit.setVoidReason(reason);
+    	Context.getService(CohortService.class).saveCohortVisit(cohortVisit);
+    }
 
+    @Override
+    public void purge(CohortVisit cohortVisit, RequestContext context) throws ResponseException {
+        Context.getService(CohortService.class).purgeCohortVisit(cohortVisit);
     }
 
     @Override
@@ -83,8 +90,12 @@ public class CohortVisitRequestResource extends DataDelegatingCrudResource<Cohor
 
     @Override
     public CohortVisit getByUniqueId(String uuid) {
-        return Context.getService(CohortService.class).getCohortVisitUuid(uuid);
+        return Context.getService(CohortService.class).getCohortVisitByUuid(uuid);
     }
 
-
+    @Override
+    protected PageableResult doSearch(RequestContext context) {
+    	// TODO Auto-generated method stub
+    	return super.doSearch(context);
+    }
 }

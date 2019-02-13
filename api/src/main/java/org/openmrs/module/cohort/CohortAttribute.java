@@ -1,8 +1,14 @@
 package org.openmrs.module.cohort;
 
+import java.util.Date;
+
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.api.context.Context;
 
 public class CohortAttribute extends BaseOpenmrsData {
+
+	private static final long serialVersionUID = 1L;
+	
 	private Integer cohortAttributeId;
 	private CohortM cohort;
 	private String value;
@@ -14,6 +20,14 @@ public class CohortAttribute extends BaseOpenmrsData {
 	
 	public void setCohortAttributeId(Integer cohortAttributeId) {
 		this.cohortAttributeId = cohortAttributeId;
+	}
+	
+	public CohortM getCohort() {
+		return cohort;
+	}
+	
+	public void setCohort(CohortM cohort) {
+		this.cohort = cohort;
 	}
 	
 	public String getValue() {
@@ -32,6 +46,19 @@ public class CohortAttribute extends BaseOpenmrsData {
 		this.cohortAttributeType = cohortAttributeType;
 	}
 	
+	/**
+	 * Convenience method for voiding this attribute
+	 * 
+	 * @param reason
+	 * @should set voided bit to true
+	 */
+	public void voidAttribute(String reason) {
+		setVoided(true);
+		setVoidedBy(Context.getAuthenticatedUser());
+		setVoidReason(reason);
+		setDateVoided(new Date());
+	}
+	
 	@Override
 	public Integer getId() {
 		return getCohortAttributeId();
@@ -43,11 +70,4 @@ public class CohortAttribute extends BaseOpenmrsData {
 		
 	}
 	
-	public CohortM getCohort() {
-		return cohort;
-	}
-	
-	public void setCohort(CohortM cohort) {
-		this.cohort = cohort;
-	}
 }
