@@ -1,4 +1,4 @@
-package org.openmrs.module.cohort.web.validator;
+package org.openmrs.module.cohort.validator;
 
 import java.util.List;
 

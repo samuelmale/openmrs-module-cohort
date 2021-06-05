@@ -1,4 +1,4 @@
-package org.openmrs.module.cohort.web.validator;
+package org.openmrs.module.cohort.validator;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortRole;

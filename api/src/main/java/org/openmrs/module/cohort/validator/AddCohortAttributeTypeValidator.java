@@ -1,4 +1,4 @@
-package org.openmrs.module.cohort.web.validator;
+package org.openmrs.module.cohort.validator;
 
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.springframework.beans.factory.annotation.Qualifier;

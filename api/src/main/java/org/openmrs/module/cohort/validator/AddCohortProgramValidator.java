@@ -1,7 +1,7 @@
-package org.openmrs.module.cohort.web.validator;
+package org.openmrs.module.cohort.validator;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.cohort.CohortType;
+import org.openmrs.module.cohort.CohortProgram;
 import org.openmrs.module.cohort.api.CohortService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -10,12 +10,12 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
-@Qualifier("addCohortTypeValidator")
-public class AddCohortTypeValidator implements Validator {
+@Qualifier("addCohortProgramValidator")
+public class AddCohortProgramValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(CohortType.class);
+        return clazz.equals(CohortProgram.class);
     }
 
     @Override
@@ -25,11 +25,13 @@ public class AddCohortTypeValidator implements Validator {
     	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "required");
         
-        CohortType currentType = (CohortType) command;
-        CohortType type = cohortService.getCohortTypeByName(currentType.getName());
-        
-        if (type != null) {
-        	errors.rejectValue("name", "a cohort type with the same name already exists");
+        CohortProgram program = (CohortProgram) command;
+
+        // TODO change it to find by name and then reject
+        for (CohortProgram programs : cohortService.getAllCohortPrograms()) {
+            if (program.getName().equals(programs.getName())) {
+            	errors.rejectValue("name", "An entry with this name already exists");
+            }
         }
     }
 }
