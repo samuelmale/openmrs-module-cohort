@@ -20,11 +20,12 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohortobs", supportedClass = CohortObs.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
+@Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE
+		+ "/cohortobs", supportedClass = CohortObs.class, supportedOpenmrsVersions = { "1.8 - 2.*" })
 public class CohortObsRequestResource extends DataDelegatingCrudResource<CohortObs> {
 
-    @Override
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+	@Override
+	public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 
 		DelegatingResourceDescription description = null;
 
@@ -43,10 +44,9 @@ public class CohortObsRequestResource extends DataDelegatingCrudResource<CohortO
 				description.addProperty("valueNumeric");
 				description.addProperty("valueText");
 				description.addProperty("accessionNumber");
-				description.addProperty("uuid");                
+				description.addProperty("uuid");
 				description.addSelfLink();
-			} 
-			else if (rep instanceof FullRepresentation) {
+			} else if (rep instanceof FullRepresentation) {
 				description.addProperty("cohort");
 				description.addProperty("concept", Representation.FULL);
 				description.addProperty("encounter", Representation.DEFAULT);
@@ -66,13 +66,13 @@ public class CohortObsRequestResource extends DataDelegatingCrudResource<CohortO
 				description.addSelfLink();
 			}
 		}
-        return description;
-    }
+		return description;
+	}
 
-    @Override
-    public DelegatingResourceDescription getCreatableProperties() {
-        DelegatingResourceDescription description = new DelegatingResourceDescription();
-        description.addRequiredProperty("cohort");
+	@Override
+	public DelegatingResourceDescription getCreatableProperties() {
+		DelegatingResourceDescription description = new DelegatingResourceDescription();
+		description.addRequiredProperty("cohort");
 		description.addRequiredProperty("concept");
 		description.addRequiredProperty("encounter");
 		description.addProperty("location");
@@ -85,11 +85,11 @@ public class CohortObsRequestResource extends DataDelegatingCrudResource<CohortO
 		description.addProperty("valueModifier");
 		description.addProperty("valueText");
 		description.addProperty("accessionNumber");
-        return description;
-    }
-    
-    @Override
-    public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
+		return description;
+	}
+
+	@Override
+	public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
 		description.addProperty("location");
 		description.addRequiredProperty("obsDateTime");
@@ -102,45 +102,46 @@ public class CohortObsRequestResource extends DataDelegatingCrudResource<CohortO
 		description.addProperty("valueText");
 		description.addProperty("accessionNumber");
 		return description;
-    }
+	}
 
-    @Override
-    public CohortObs save(CohortObs cohortObs) {
-        return Context.getService(CohortService.class).saveCohortObs(cohortObs);
-    }
+	@Override
+	public CohortObs save(CohortObs cohortObs) {
+		return Context.getService(CohortService.class).saveCohortObs(cohortObs);
+	}
 
-    @Override
-    protected void delete(CohortObs cohortObs, String reason, RequestContext context) throws ResponseException {
-    	cohortObs.setVoided(true);
-    	cohortObs.setVoidReason(reason);
-        Context.getService(CohortService.class).saveCohortObs(cohortObs);
-    }
+	@Override
+	protected void delete(CohortObs cohortObs, String reason, RequestContext context) throws ResponseException {
+		cohortObs.setVoided(true);
+		cohortObs.setVoidReason(reason);
+		Context.getService(CohortService.class).saveCohortObs(cohortObs);
+	}
 
-    @Override
-    public void purge(CohortObs cohortObs, RequestContext context) throws ResponseException {
-    	Context.getService(CohortService.class).purgeCohortObs(cohortObs);
-    }
+	@Override
+	public void purge(CohortObs cohortObs, RequestContext context) throws ResponseException {
+		Context.getService(CohortService.class).purgeCohortObs(cohortObs);
+	}
 
-    @Override
-    public CohortObs newDelegate() {
-        return new CohortObs();
-    }
+	@Override
+	public CohortObs newDelegate() {
+		return new CohortObs();
+	}
 
-    @Override
-    public CohortObs getByUniqueId(String id) {
-        return Context.getService(CohortService.class).getCohortObsByUuid(id);
-    }
+	@Override
+	public CohortObs getByUniqueId(String id) {
+		return Context.getService(CohortService.class).getCohortObsByUuid(id);
+	}
 
-    @Override
-    protected PageableResult doSearch(RequestContext context) {
-    	String encounter = context.getParameter("encounter");
-    	
-    	CohortEncounter encountero = Context.getService(CohortService.class).getCohortEncounterByUuid(encounter);
-    	if(encountero == null) {
-    		throw new IllegalArgumentException("No valid value specified for param encounter");
-    	}
-    	
-    	List<CohortObs> list = Context.getService(CohortService.class).getCohortObsByEncounterId(encountero.getEncounterId());
-    	return new NeedsPaging<CohortObs>(list, context);
-    }
+	@Override
+	protected PageableResult doSearch(RequestContext context) {
+		String encounter = context.getParameter("encounter");
+
+		CohortEncounter encountero = Context.getService(CohortService.class).getCohortEncounterByUuid(encounter);
+		if (encountero == null) {
+			throw new IllegalArgumentException("No valid value specified for param encounter");
+		}
+
+		List<CohortObs> list = Context.getService(CohortService.class)
+				.getCohortObsByEncounterId(encountero.getEncounterId());
+		return new NeedsPaging<CohortObs>(list, context);
+	}
 }
