@@ -93,12 +93,11 @@ public interface CohortDAO {
 	
 	CohortVisit getCohortVisitById(Integer id);
 	CohortVisit getCohortVisitByUuid(String uuid);
-	CohortVisit getCohortVisitUuid(String uuid);
-	CohortVisit getCohortVisitByLocationId(Integer id);
+	List<CohortVisit> getCohortVisitsByLocationId(Integer id);
 	List<CohortVisit> getCohortVisitsByDate(Date startDate, Date endDate);
 	CohortVisit saveCohortVisit(CohortVisit cvisit);
 	
-	CohortAttribute findCohortAtt(Integer id);
+	CohortAttribute getCohortAttribute(Integer id);
 	List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeTypeId);
 	List<CohortAttribute> findCohortAttribute(String name);
 
@@ -106,17 +105,16 @@ public interface CohortDAO {
 	List<CohortAttributeType> getAllCohortAttributes();
 	CohortAttributeType findCohortAttributes(String attribute_type_name);
 	
-	List<CohortEncounter> findCohortEnc(Integer id);
+	CohortEncounter findCohortEncounter(Integer id);
 	List<CohortEncounter> findCohortEncounter(String cohort, String location);
 	List<CohortEncounter> findCohortEncounters();
 	List<CohortEncounter> findCohortEncounters(String name);
 	List<CohortEncounter> getEncounters(EncounterSearchCriteria searchCriteria);
 	List<CohortEncounter> getEncounters(String query, Integer cohortId, Integer start, Integer length, boolean includeVoided);
 	
-	List<CohortM> findCohort(Integer id);
 	List<CohortM> findCohorts();
 	List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes, CohortType type);
-	List<CohortM> getCohort(Integer id);
+	CohortM getCohort(Integer id);
 	List<CohortM> getCohortsByLocationId(Integer id);
 	List<CohortM> getCohortByCohortTypeId(Integer id);
 	List<CohortM> getCohortByCohortProgramId(Integer id);
@@ -143,7 +141,7 @@ public interface CohortDAO {
 	List<CohortRole> findRoles(String name);
 	
 	List<CohortType> findCohortType();
-	List<CohortType> findCohortType(Integer id);
+	CohortType findCohortType(Integer id);
 	List<CohortType> findCohortType(String cohort_name);
 	List<CohortType> getAllCohortTypes();
 	

@@ -287,7 +287,7 @@ public class CohortServiceImplTest {
 	public void getCohortVisitByUuid_shouldGetCohortVisitByUuid() {
 		CohortVisit cohortVisit = mock(CohortVisit.class);
 		when(cohortVisit.getUuid()).thenReturn(COHORT_VISIT_UUID);
-		when(dao.getCohortVisitUuid(COHORT_VISIT_UUID)).thenReturn(cohortVisit);
+		when(dao.getCohortVisitByUuid(COHORT_VISIT_UUID)).thenReturn(cohortVisit);
 		CohortVisit result = cohortService.getCohortVisitByUuid(COHORT_VISIT_UUID);
 		assertThat(result, notNullValue());
 		assertThat(result.getUuid(), equalTo(COHORT_VISIT_UUID));

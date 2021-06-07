@@ -205,7 +205,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	@Override
 	public CohortVisit getCohortVisitByUuid(String uuid) {
-		return dao.getCohortVisitUuid(uuid);
+		return dao.getCohortVisitByUuid(uuid);
 	}
 	
 	@Override
@@ -220,7 +220,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	@Override
 	public CohortAttribute getCohortAttributeById(Integer id) {
-		return dao.findCohortAtt(id);
+		return dao.getCohortAttribute(id);
 	}
 	
 	@Override
@@ -321,7 +321,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 			return null;
 		}
 		ProviderService providerService = Context.getProviderService();
-		Collection<Provider> ret = new HashSet<Provider>();
+		Collection<Provider> ret = new HashSet<>();
 		for (User u : users) {
 			ret.addAll(providerService.getProvidersByPerson(u.getPerson()));
 		}
@@ -362,11 +362,11 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	@Override
 	public List<CohortObs> getObservationsByCohortAndConcept(CohortM who,
 			Concept question) {
-		List<CohortM> whom = new Vector<CohortM>();
+		List<CohortM> whom = new Vector<>();
 		if (who != null && who.getCohortId() != null) {
 			whom.add(who);
 		}
-		List<Concept> questions = new Vector<Concept>();
+		List<Concept> questions = new Vector<>();
 		questions.add(question);
 		
 		return Context.getService(CohortService.class).getObservations(whom, null, questions, null, null, null, null, null, null, null, false);
@@ -477,8 +477,8 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	}
 
 	@Override
-	public CohortVisit getCohortVisitByLocation(Integer id) {
-		return dao.getCohortVisitByLocationId(id);
+	public List<CohortVisit> getCohortVisitsByLocation(Integer id) {
+		return dao.getCohortVisitsByLocationId(id);
 	}
 
 	@Override
