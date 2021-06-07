@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<module configVersion="1.2">
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN"
+        "https://resources.openmrs.org/doctype/config-1.6.dtd">
+<module configVersion="1.6">
 
     <!-- Module Properties -->
     <id>${project.parent.artifactId}</id>
@@ -43,18 +45,6 @@
 
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>
-        CohortType.hbm.xml
-        CohortRole.hbm.xml
-        CohortAttributeType.hbm.xml
-        CohortAttribute.hbm.xml
-        CohortEncounter.hbm.xml
-        Cohort.hbm.xml
-        CohortMember.hbm.xml
-        CohortVisit.hbm.xml
-        CohortProgram.hbm.xml
-        CohortObs.hbm.xml
-        CohortLeader.hbm.xml
-        CohortMemberVisit.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->

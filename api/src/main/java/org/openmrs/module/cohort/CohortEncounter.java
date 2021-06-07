@@ -1,6 +1,18 @@
 
 package org.openmrs.module.cohort;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.EncounterProvider;
@@ -21,20 +34,51 @@ import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.User;
+import org.openmrs.annotation.DisableHandlers;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.handler.VoidHandler;
 
+@Entity
+@Table(name = "cohort_encounter")
 public class CohortEncounter extends BaseOpenmrsData {
+
 	private static final long serialVersionUID = 1L;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "cohort_id")
 	private Integer encounterId;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cohort_id", insertable = false, updatable = false)
 	private CohortM cohort;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "encounter_type_id")
 	private EncounterType encounterType;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "location_id")
 	private Location location;
+
+	@Column(name = "encounter_datetime")
 	private Date encounterDatetime;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "form_id")
 	private Form form;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cohort_visit_id")
 	private CohortVisit visit;
+
+	@OneToMany(mappedBy = "encounter")
 	private Set<CohortObs> obs;
-	private Set<EncounterProvider> encounterProviders = new LinkedHashSet<EncounterProvider>();
+
+	@OneToMany(mappedBy = "encounter", cascade = CascadeType.ALL)
+	@OrderBy("provider_id")
+	@DisableHandlers(handlerTypes = { VoidHandler.class })
+	private Set<EncounterProvider> encounterProviders = new LinkedHashSet<>();
 
 	public Integer getEncounterId() {
 		return encounterId;
@@ -104,12 +148,12 @@ public class CohortEncounter extends BaseOpenmrsData {
 	public Integer getId() {
 		return getEncounterId();
 	}
-	
+
 	@Override
 	public void setId(Integer id) {
 		setEncounterId(id);
 	}
-	
+
 	public void setProvider(EncounterRole role, Provider provider) {
 		boolean hasProvider = false;
 		for (Iterator<EncounterProvider> it = encounterProviders.iterator(); it.hasNext(); ) {
@@ -124,12 +168,12 @@ public class CohortEncounter extends BaseOpenmrsData {
 				}
 			}
 		}
-		
+
 		if (!hasProvider) {
 			addProvider(role, provider);
 		}
 	}
-	
+
 	public void addProvider(EncounterRole role, Provider provider) {
 		// first, make sure the provider isn't already there
 		for (EncounterProvider ep : encounterProviders) {
@@ -137,6 +181,7 @@ public class CohortEncounter extends BaseOpenmrsData {
 				return;
 			}
 		}
+
 		EncounterProvider encounterProvider = new EncounterProvider();
 		//encounterProvider.setEncounter(this);
 		encounterProvider.setEncounterRole(role);
@@ -145,11 +190,10 @@ public class CohortEncounter extends BaseOpenmrsData {
 		encounterProvider.setCreator(Context.getAuthenticatedUser());
 		encounterProviders.add(encounterProvider);
 	}
-	
-	
+
 	public Set<CohortObs> getObs() {
 		Set<CohortObs> ret = new HashSet<CohortObs>();
-		
+
 		if (this.obs != null) {
 			for (CohortObs o : this.obs) {
 				ret.addAll(getObsLeaves(o));
@@ -157,13 +201,13 @@ public class CohortEncounter extends BaseOpenmrsData {
 		}
 		return ret;
 	}
-	
+
 	private List<CohortObs> getObsLeaves(CohortObs obsParent) {
-		List<CohortObs> leaves = new ArrayList<CohortObs>();
-		
+		List<CohortObs> leaves = new ArrayList<>();
+
 		if (obsParent.hasGroupMembers()) {
 			for (CohortObs child : obsParent.getGroupMembers()) {
-				if (!child.isVoided()) {
+				if (!child.getVoided()) {
 					if (!child.isObsGrouping()) {
 						leaves.add(child);
 					} else {
@@ -172,40 +216,40 @@ public class CohortEncounter extends BaseOpenmrsData {
 					}
 				}
 			}
-		} else if (!obsParent.isVoided()) {
+		} else if (!obsParent.getVoided()) {
 			leaves.add(obsParent);
 		}
-		
+
 		return leaves;
 	}
-	
+
 	public Set<CohortObs> getAllObs(boolean includeVoided) {
 		if (includeVoided && obs != null) {
 			return obs;
 		}
-		
+
 		Set<CohortObs> ret = new HashSet<CohortObs>();
-		
+
 		if (this.obs != null) {
 			for (CohortObs o : this.obs) {
 				if (includeVoided) {
 					ret.add(o);
-				} else if (!o.isVoided()) {
+				} else if (!o.getVoided()) {
 					ret.add(o);
 				}
 			}
 		}
 		return ret;
 	}
-	
+
 	public void setObs(Set<CohortObs> obs) {
 		this.obs = obs;
 	}
-	
+
 	public Set<CohortObs> getAllObs() {
 		return getAllObs(false);
 	}
-	
+
 	public Set<CohortObs> getObsAtTopLevel(boolean includeVoided) {
 		Set<CohortObs> ret = new HashSet<CohortObs>();
 		for (CohortObs o : getAllObs(includeVoided)) {
@@ -215,51 +259,50 @@ public class CohortEncounter extends BaseOpenmrsData {
 		}
 		return ret;
 	}
-	
-	
+
 	public void addObs(CohortObs observation) {
 		if (obs == null) {
-			obs = new HashSet<CohortObs>();
+			obs = new HashSet<>();
 		}
-		
+
 		if (observation != null) {
 			obs.add(observation);
-			
+
 			//Propagate some attributes to the obs and any groupMembers
-			
+
 			// a Deque is a two-ended queue, that lets us add to the end, and fetch from the beginning
 			Deque<CohortObs> obsToUpdate = new ArrayDeque<CohortObs>();
 			obsToUpdate.add(observation);
-			
+
 			//prevent infinite recursion if an obs is its own group member
 			Set<CohortObs> seenIt = new HashSet<CohortObs>();
-			
+
 			while (!obsToUpdate.isEmpty()) {
 				CohortObs o = obsToUpdate.removeFirst();
-				
+
 				//has this obs already been processed?
 				if (o == null || seenIt.contains(o)) {
 					continue;
 				}
 				seenIt.add(o);
-				
+
 				o.setEncounterId(this);
-				
+
 				//if the attribute was already set, preserve it
 				//if not, inherit the values sfrom the encounter
 				if (o.getObsDateTime() == null) {
 					o.setObsDateTime(getEncounterDatetime());
 				}
-				
+
 				//propagate attributes to  all group members as well
 				if (o.getGroupMembers(true) != null) {
 					obsToUpdate.addAll(o.getGroupMembers());
 				}
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * Remove the given observation from the list of obs for this Encounter
 	 *
@@ -273,7 +316,7 @@ public class CohortEncounter extends BaseOpenmrsData {
 			obs.remove(observation);
 		}
 	}
-	
+
 	@Deprecated
 	public Person getProvider() {
 		if (encounterProviders == null || encounterProviders.isEmpty()) {
@@ -288,7 +331,7 @@ public class CohortEncounter extends BaseOpenmrsData {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param provider The provider to set.
 	 * @deprecated use {@link #setProvider(Person)}
@@ -297,7 +340,7 @@ public class CohortEncounter extends BaseOpenmrsData {
 	public void setProvider(User provider) {
 		setProvider(provider.getPerson());
 	}
-	
+
 	/**
 	 * @param provider The provider to set.
 	 * @should set existing provider for unknown role

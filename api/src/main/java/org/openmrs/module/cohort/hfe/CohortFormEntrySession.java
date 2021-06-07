@@ -194,7 +194,7 @@ public class CohortFormEntrySession extends FormEntrySession {
 				obsService.voidObs(o, "htmlformentry");
 				// if o was in a group and it has no obs left, void the group
 				//TODO IMPLEMENT FOR COHORT OBS
-				cohortobs.setObsGroup(o.getObsGroup());
+				//cohortobs.setObsGroup(o.getObsGroup());
 				voidObsGroupIfAllChildObsVoided(cohortobs);
 			}
 		}
