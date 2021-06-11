@@ -50,16 +50,16 @@ public class CohortM extends BaseOpenmrsData {
 	@JoinColumn(name = "cohort_program_id")
 	private CohortProgram cohortProgram;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cohort", cascade = CascadeType.ALL)
 	private List<CohortAttribute> attributes = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cohort", cascade = CascadeType.ALL)
 	private List<CohortLeader> cohortLeaders = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cohort", cascade = CascadeType.ALL)
 	private List<CohortMember> cohortMembers = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cohort", cascade = CascadeType.ALL)
 	private List<CohortVisit> cohortVisits = new ArrayList<>();
 
 	@Column(name = "is_group_cohort", nullable = false)
