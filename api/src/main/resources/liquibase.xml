@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
-                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/3.0"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/3.0
+                  https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
     <!--
         See http://www.liquibase.org/manual/home#available_database_refactorings
         for a list of supported elements and attributes
@@ -22,7 +22,7 @@
             <column name="name" type="varchar(255)" >
 				<constraints nullable="false" />
 			</column>
-            
+
             <column name="description" type="varchar(255)"/>
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
@@ -63,7 +63,7 @@
             <column name="cohort_type_id" type="int(11)">
                 <constraints foreignKeyName="cohortrolecohorttype1_fk" references="cohort_type(cohort_type_id)"/>
             </column>
-            
+
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -100,7 +100,7 @@
             <column name="name" type="varchar(255)" >
 				<constraints nullable="false" />
 			</column>
-            
+
             <column name="description" type="varchar(255)"/>
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
@@ -141,7 +141,7 @@
             <column name="format" type="varchar(255)">
 				<constraints nullable="false" />
 			</column>
-            
+
             <column name="description" type="varchar(255)"/>
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
@@ -166,7 +166,7 @@
 			</column>
         </createTable>
     </changeSet>
-    <changeSet id="cohortmodul1065_location_id" author="sharon"> 
+    <changeSet id="cohortmodul1065_location_id" author="sharon">
 		<preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="cohort" columnName="location_id"/>
@@ -175,7 +175,7 @@
         <comment>Creating a location_id column</comment>
         <addColumn tableName="cohort">
             <column name="location_id" type="varchar(20)" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
 	<changeSet id="cohortmodul1065_startDate" author="sharon">
 		<preConditions onFail="MARK_RAN">
@@ -186,7 +186,7 @@
         <comment>Creating a start_date column</comment>
         <addColumn tableName="cohort">
             <column name="startDate" type="datetime" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
 	<changeSet id="cohortmodul1065_endDate" author="sharon">
 		<preConditions onFail="MARK_RAN">
@@ -197,9 +197,9 @@
         <comment>Creating a end_date column</comment>
         <addColumn tableName="cohort">
             <column name="endDate" type="datetime" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
-	<changeSet id="cohortmodul1065_is_group_cohort" author="sharon"> 
+	<changeSet id="cohortmodul1065_is_group_cohort" author="sharon">
 		<preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="cohort" columnName="is_group_cohort"/>
@@ -208,9 +208,9 @@
         <comment>Creating a is_group_cohort column</comment>
         <addColumn tableName="cohort">
             <column name="is_group_cohort" type="tinyint(1)" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
-	<changeSet id="cohortmodul1065_cohort_type_id" author="sharon"> 
+	<changeSet id="cohortmodul1065_cohort_type_id" author="sharon">
 		<preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="cohort" columnName="cohort_type_id"/>
@@ -219,9 +219,9 @@
         <comment>Creating a cohort_type_id column</comment>
         <addColumn tableName="cohort">
             <column name="cohort_type_id" type="int(11)" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
-	<changeSet id="cohortmodul1065_cohort_program_id" author="sharon"> 
+	<changeSet id="cohortmodul1065_cohort_program_id" author="sharon">
 		<preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="cohort" columnName="cohort_program_id"/>
@@ -230,7 +230,7 @@
         <comment>Creating a cohort_program_id column</comment>
         <addColumn tableName="cohort">
             <column name="cohort_program_id" type="int(11)" defaultValue="null"  />
-        </addColumn>		
+        </addColumn>
     </changeSet>
     <changeSet id="cohortattribute1065"  author="sharon">
 			<preConditions onFail="MARK_RAN">
@@ -251,7 +251,7 @@
             <column name="cohort_attribute_type_id" type="int(11)">
                 <constraints nullable="false" foreignKeyName="cohortattcohortattributetype_fk" references="cohort_attributes_type(cohort_attribute_type_id)"/>
             </column>
-            
+
             <column name="date_created" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -296,7 +296,7 @@
             </column>
             <column name="start_date" type="datetime"/>
             <column name="end_date" type="datetime"/>
-            
+
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -348,7 +348,7 @@
             <column name="encounter_datetime" type="datetime">
 				<constraints nullable="false" />
 			</column>
-            
+
 			<column name="date_created" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -440,7 +440,7 @@
             <column name="value_text" type="text"/>
             <column name="value_complex" type="varchar(255)"/>
             <column name="comment" type="varchar(255)"/>
-			
+
             <column name="date_created" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -531,10 +531,8 @@
 			<column name="uuid" type="varchar(255)">
 				<constraints nullable="false" />
 			</column>
-
 		</createTable>
 	</changeSet>
-
 	<changeSet id="add_cohort_member_attribute_type_20210609" author="corneliouzbett">
 		<preConditions onFail="MARK_RAN" onError="WARN">
 			<not>
@@ -580,7 +578,6 @@
 			</column>
 		</createTable>
 	</changeSet>
-
 	<changeSet id="add_cohort_member_attribute_20210607"  author="corneliouzbett">
 		<preConditions onFail="MARK_RAN" onError="WARN">
 			<not>
@@ -635,4 +632,24 @@
 			<column name="cohort_role_id" type="int(11)"/>
 		</addColumn>
 	</changeSet>
+    <changeSet id="location_id_to_int" author="ibacher">
+        <preConditions>
+            <columnExists tableName="cohort" columnName="location_id"/>
+        </preConditions>
+        <modifyDataType tableName="cohort" columnName="location_id" newDataType="int(11)"/>
+		<addForeignKeyConstraint baseTableName="cohort" baseColumnNames="location_id"
+								 referencedTableName="location" referencedColumnNames="location_id"
+								 constraintName="cohort_location_fk"/>
+    </changeSet>
+    <changeSet id="add_cohort_location_index" author="ibacher">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="cohort_location_type_idx" />
+            </not>
+        </preConditions>
+        <createIndex tableName="cohort" indexName="cohort_location_type_idx">
+            <column name="location_id" />
+            <column name="cohort_type_id" />
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
