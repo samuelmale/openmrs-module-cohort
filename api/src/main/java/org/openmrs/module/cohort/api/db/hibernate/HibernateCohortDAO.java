@@ -197,7 +197,7 @@ public class HibernateCohortDAO implements CohortDAO {
 
 	@Override
 	public List<CohortM> findCohorts() {
-		return (List<CohortM>) getCurrentSession().createQuery("from CohortM");
+		return (List<CohortM>) getCurrentSession().createQuery("from CohortM").list();
 	}
 
 	@Override

@@ -10,41 +10,14 @@
 package org.openmrs.module.cohort;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.openmrs.attribute.AttributeType;
 import org.openmrs.attribute.BaseAttributeType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "cohort_member_attribute_type")
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-public class CohortMemberAttributeType extends BaseAttributeType<CohortMember> implements AttributeType<CohortMember>{
+public class CohortMemberAttributeType extends BaseAttributeType<CohortMember> {
 
     private static final long serialVersionUID = 3L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "attribute_type_id")
-    private Integer cohortMemberAttributeTypeId;
-
-    @Override
-    public Integer getId() {
-        return this.cohortMemberAttributeTypeId;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.cohortMemberAttributeTypeId = id;
-    }
+    @Getter
+    @Setter
+    private Integer id;
 }

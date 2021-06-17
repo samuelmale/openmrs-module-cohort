@@ -69,8 +69,8 @@ public class CohortMemberAttributeDaoTest extends BaseModuleContextSensitiveTest
     public void shouldGetCohortMemberAttributeByUuid() {
         CohortMemberAttribute cohortMemberAttribute = dao.getCohortMemberAttributeByUuid(COHORT_MEMBER_ATTRIBUTE_UUID);
         assertThat(cohortMemberAttribute, notNullValue());
-        assertThat(cohortMemberAttribute.getCohortMemberAttributeId(), notNullValue());
-        assertThat(cohortMemberAttribute.getCohortMemberAttributeId(), is(COHORT_MEMBER_ATTRIBUTE_ID));
+        assertThat(cohortMemberAttribute.getId(), notNullValue());
+        assertThat(cohortMemberAttribute.getId(), is(COHORT_MEMBER_ATTRIBUTE_ID));
         assertThat(cohortMemberAttribute.getUuid(), equalTo(COHORT_MEMBER_ATTRIBUTE_UUID));
     }
 
@@ -86,8 +86,8 @@ public class CohortMemberAttributeDaoTest extends BaseModuleContextSensitiveTest
     public void shouldCreateNewCohortMemberAttribute() {
         CohortMemberAttribute cohortAttribute = dao.saveCohortMemberAttribute(TestDataUtils.COHORT_MEMBER_ATTRIBUTE());
         assertThat(cohortAttribute, notNullValue());
-        assertThat(cohortAttribute.getCohortMemberAttributeId(), notNullValue());
-        assertThat(cohortAttribute.getCohortMemberAttributeId(), equalTo(TEST_COHORT_MEMBER_ATTRIBUTE_ID));
+        assertThat(cohortAttribute.getId(), notNullValue());
+        assertThat(cohortAttribute.getId(), equalTo(TEST_COHORT_MEMBER_ATTRIBUTE_ID));
         assertThat(cohortAttribute.getValue(), equalTo(COHORT_MEMBER_ATTRIBUTE_VALUE));
     }
 

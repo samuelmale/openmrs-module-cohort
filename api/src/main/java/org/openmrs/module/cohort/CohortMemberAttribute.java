@@ -9,63 +9,24 @@
  */
 package org.openmrs.module.cohort;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.openmrs.attribute.Attribute;
 import org.openmrs.attribute.BaseAttribute;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "cohort_member_attribute")
-@EqualsAndHashCode(callSuper = true)
-@Getter
-@Setter
-@ToString
 public class CohortMemberAttribute extends BaseAttribute<CohortMemberAttributeType, CohortMember> implements Attribute<CohortMemberAttributeType, CohortMember> {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "cohort_member_attribute_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer cohortMemberAttributeId;
+    @Getter
+    @Setter
+    private Integer id;
 
-    @Column(name = "value_reference")
-    private String Value_reference;
-
-    @ManyToOne
-    @JoinColumn(name = "cohort_member_id")
-    private CohortMember cohortMember;
-
-    @ManyToOne
-    @JoinColumn(name = "attribute_type_id")
-    private CohortMemberAttributeType cohortMemberAttributeType;
-
-    @Override
-    public Integer getId() {
-        return this.cohortMemberAttributeId;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.cohortMemberAttributeId = id;
-    }
+	public CohortMember getCohortMember() {
+		return this.getOwner();
+	}
 
     public void setCohortMember(CohortMember cohortMember) {
         this.setOwner(cohortMember);
-    }
-
-    public CohortMember getCohortMember() {
-       return this.getOwner();
     }
 }

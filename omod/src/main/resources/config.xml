@@ -45,6 +45,8 @@
 
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>
+        CohortMemberAttribute.hbm.xml
+        CohortMemberAttributeType.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->

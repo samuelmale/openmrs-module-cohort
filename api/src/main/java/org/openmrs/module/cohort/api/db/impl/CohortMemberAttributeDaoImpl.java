@@ -45,7 +45,7 @@ public class CohortMemberAttributeDaoImpl implements CohortMemberAttributeDao {
     @SuppressWarnings("unchecked")
     public List<CohortMemberAttribute> getCohortMemberAttributesByTypeUuid(String attributeTypeUuid) {
         return getCurrentSession().createCriteria(CohortMemberAttribute.class)
-                .createAlias("cohortMemberAttributeType", "cm").add(
+                .createAlias("attributeType", "cm").add(
                 Restrictions.eq("cm.uuid", attributeTypeUuid)).list();
     }
 

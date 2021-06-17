@@ -54,7 +54,7 @@ public class TestDataUtils {
 	public static CohortMemberAttributeType COHORT_MEMBER_ATTRIBUTE_TYPE() {
 		CohortMemberAttributeType cohortMemberAttributeType = new CohortMemberAttributeType();
 		cohortMemberAttributeType.setId(1);
-		cohortMemberAttributeType.setCohortMemberAttributeTypeId(103);
+		cohortMemberAttributeType.setId(103);
 		cohortMemberAttributeType.setName("cohort member attributeType Name");
 		cohortMemberAttributeType.setDescription("test cohort member attribute type");
 		cohortMemberAttributeType.setDatatypeClassname("java.lang.String");
@@ -67,7 +67,7 @@ public class TestDataUtils {
 		cohortMemberAttribute.setUuid("32816782-d578-401c-8475-8ccbb26ce001");
 		cohortMemberAttribute.setAttributeType(COHORT_MEMBER_ATTRIBUTE_TYPE());
 		cohortMemberAttribute.setValue("cohortMemberAttribute");
-		cohortMemberAttribute.setCohortMemberAttributeId(100);
+		cohortMemberAttribute.setId(100);
 		return cohortMemberAttribute;
 	}
 

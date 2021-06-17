@@ -75,8 +75,8 @@ public class CohortMemberAttributeTypeDaoTest extends BaseModuleContextSensitive
     public void shouldCreateNewCohortMemberAttributeType() {
         CohortMemberAttributeType cohortMemberAttributeType = dao.createCohortMemberAttributeType(TestDataUtils.COHORT_MEMBER_ATTRIBUTE_TYPE());
         assertThat(cohortMemberAttributeType, notNullValue());
-        assertThat(cohortMemberAttributeType.getCohortMemberAttributeTypeId(), notNullValue());
-        assertThat(cohortMemberAttributeType.getCohortMemberAttributeTypeId(), equalTo(COHORT_MEMBER_ATTRIBUTE_TYPE_ID));
+        assertThat(cohortMemberAttributeType.getId(), notNullValue());
+        assertThat(cohortMemberAttributeType.getId(), equalTo(COHORT_MEMBER_ATTRIBUTE_TYPE_ID));
         assertThat(cohortMemberAttributeType.getName(), equalTo(COHORT_MEMBER_ATTRIBUTE_TYPE_NAME));
     }
 

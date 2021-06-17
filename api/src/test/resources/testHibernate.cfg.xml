@@ -115,6 +115,9 @@
 
         <mapping resource="org/openmrs/api/db/hibernate/ClobDatatypeStorage.hbm.xml" />
 
+        <mapping resource="CohortMemberAttribute.hbm.xml" />
+        <mapping resource="CohortMemberAttributeType.hbm.xml" />
+
     </session-factory>
 
 </hibernate-configuration>

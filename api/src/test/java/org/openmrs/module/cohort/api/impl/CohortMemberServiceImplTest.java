@@ -65,11 +65,11 @@ public class CohortMemberServiceImplTest {
     public void saveCohortMemberAttributeType() {
         CohortMemberAttributeType cohortMemberAttributeType = mock(CohortMemberAttributeType.class);
         when(attributeTypeDao.createCohortMemberAttributeType(cohortMemberAttributeType)).thenReturn(cohortMemberAttributeType);
-        when(cohortMemberAttributeType.getCohortMemberAttributeTypeId()).thenReturn(1);
+        when(cohortMemberAttributeType.getId()).thenReturn(1);
 
         CohortMemberAttributeType result = cohortMemberService.saveCohortMemberAttributeType(cohortMemberAttributeType);
         assertThat(result, notNullValue());
-        assertThat(result.getCohortMemberAttributeTypeId(), is(1));
+        assertThat(result.getId(), is(1));
     }
 
     @Test
@@ -90,11 +90,11 @@ public class CohortMemberServiceImplTest {
     public void saveCohortMemberAttribute() {
         CohortMemberAttribute cohortMemberAttribute = mock(CohortMemberAttribute.class);
         when(attributeDao.saveCohortMemberAttribute(cohortMemberAttribute)).thenReturn(cohortMemberAttribute);
-        when(cohortMemberAttribute.getCohortMemberAttributeId()).thenReturn(1);
+        when(cohortMemberAttribute.getId()).thenReturn(1);
 
         CohortMemberAttribute result = cohortMemberService.saveCohortMemberAttribute(cohortMemberAttribute);
         assertThat(result, notNullValue());
-        assertThat(result.getCohortMemberAttributeId(), is(1));
+        assertThat(result.getId(), is(1));
     }
 
     @Test
