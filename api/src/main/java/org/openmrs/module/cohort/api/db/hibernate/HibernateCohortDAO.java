@@ -312,8 +312,8 @@ public class HibernateCohortDAO implements CohortDAO {
 
 	@Override
 	public CohortM getCohortUuid(String uuid) {
-		return (CohortM) getCurrentSession().createQuery("from CohortM t where t.uuid = :uuid").setString("uuid", uuid)
-				.uniqueResult();
+		return (CohortM) getCurrentSession().createCriteria(CohortM.class)
+				.add(Restrictions.eq("uuid", uuid)).uniqueResult();
 	}
 
 	@Override
