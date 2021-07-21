@@ -11,6 +11,7 @@ import org.openmrs.Patient;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.CohortMember;
 import org.openmrs.module.cohort.CohortMemberUnsubscriber;
+import org.openmrs.module.cohort.api.db.CohortDAO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,9 +35,8 @@ public class CohortMemberUnsubscriberTest {
     private CohortM cohort2;
     private CohortM cohort3;
     private List<CohortM> cohorts;
-    private CohortMemberUnsubscriber cohortMemberUnsubscriber;
     @Mock
-    private CohortService service;
+    private CohortDAO service;
 
 
     @Before
@@ -75,7 +75,6 @@ public class CohortMemberUnsubscriberTest {
         cohort3.setCohortMembers(Arrays.asList(member4, member6));
 
         cohortMembers = Arrays.asList(member1, member2, member3, member4, member5, member6);
-        cohortMemberUnsubscriber = new CohortMemberUnsubscriber(service);
 
         // Some boilerplate stubs
         doAnswer(new Answer() {
@@ -84,7 +83,7 @@ public class CohortMemberUnsubscriberTest {
                 int patientId = invocationOnMock.getArgument(0);
                 return cohortMembers.stream().filter(m -> m.getPatient().getId() == patientId).collect(Collectors.toList());
             }
-        }).when(service).findCohortMembersByPatient(anyInt());
+        }).when(service).getCohortMembersByPatientId(anyInt());
 
         doAnswer(new Answer() {
             @Override
@@ -92,13 +91,13 @@ public class CohortMemberUnsubscriberTest {
                 CohortMember cohortMember = invocationOnMock.getArgument(0);
                 return cohortMember;
             }
-        }).when(service).saveCohortMember(any(CohortMember.class));
+        }).when(service).saveCPatient(any(CohortMember.class));
     }
 
     @Test
     public void dismissFromPastCohorts_shouldDismissPatientsFromAllOtherCohortsExceptCohort1() {
         // replay
-        List<CohortMember> dismissedMembers = cohortMemberUnsubscriber.dismissFromPastCohorts(cohort1.getCohortMembers(), cohort1);
+        List<CohortMember> dismissedMembers = CohortMemberUnsubscriber.dismissFromPastCohorts(cohort1.getCohortMembers(), cohort1, service);
 
         // NOTES:
         // cohort1 had 3 members ie. member1, member2 and member5 associated to patient1, patient2 and patient3 respectively
@@ -112,17 +111,17 @@ public class CohortMemberUnsubscriberTest {
         CohortMember dismissedMember1 = dismissedMembers.stream().filter(cohortMember -> cohortMember.getPatient().getId() == patient1.getId()).collect(Collectors.toList()).get(0);
         assertThat(dismissedMember1.getCohort().getUuid(), equalTo(cohort3.getUuid()));
         assertTrue(dismissedMember1.getVoided());
-        assertThat(dismissedMember1.getVoidReason(), equalTo(cohortMemberUnsubscriber.VOID_REASON));
+        assertThat(dismissedMember1.getVoidReason(), equalTo(CohortMemberUnsubscriber.VOID_REASON));
         // confirm that patient2's membership with cohort3 was revoked
         CohortMember dismissedMember2 = dismissedMembers.stream().filter(cohortMember -> cohortMember.getPatient().getId() == patient2.getId()).collect(Collectors.toList()).get(0);
         assertThat(dismissedMember2.getCohort().getUuid(), equalTo(cohort3.getUuid()));
         assertTrue(dismissedMember2.getVoided());
-        assertThat(dismissedMember2.getVoidReason(), equalTo(cohortMemberUnsubscriber.VOID_REASON));
+        assertThat(dismissedMember2.getVoidReason(), equalTo(CohortMemberUnsubscriber.VOID_REASON));
         // confirm that patient3's membership with cohort2 was revoked
         CohortMember dismissedMember3 = dismissedMembers.stream().filter(cohortMember -> cohortMember.getPatient().getId() == patient3.getId()).collect(Collectors.toList()).get(0);
         assertThat(dismissedMember3.getCohort().getUuid(), equalTo(cohort2.getUuid()));
         assertTrue(dismissedMember3.getVoided());
-        assertThat(dismissedMember3.getVoidReason(), equalTo(cohortMemberUnsubscriber.VOID_REASON));
+        assertThat(dismissedMember3.getVoidReason(), equalTo(CohortMemberUnsubscriber.VOID_REASON));
     }
 
     private CohortM newCohort(String name, Integer id, String uuid) {

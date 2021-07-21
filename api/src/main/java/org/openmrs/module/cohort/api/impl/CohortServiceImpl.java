@@ -61,7 +61,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 		CohortMember savedMember =  dao.saveCPatient(cohortMember);
 		if (savedMember.getCohort().getCohortType().shouldDismissMembersFromPastCohorts()) {
 			// unsubscribe this cohort member from past cohorts
-			new CohortMemberUnsubscriber().dismissFromPastCohorts(Arrays.asList(savedMember), savedMember.getCohort());
+			CohortMemberUnsubscriber.dismissFromPastCohorts(Arrays.asList(savedMember), savedMember.getCohort(), dao);
 		}
 		return  savedMember;
 	}
@@ -73,13 +73,6 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	@Override
 	public CohortType saveCohort(CohortType cohort) {
-		User u = Context.getAuthenticatedUser();
-		if (cohort.getCreator() == null) {
-			cohort.setCreator(u);
-		}
-		if (cohort.getId() == null && cohort.getDateCreated() == null) {
-			cohort.setDateCreated(new Date());
-		}
 		return dao.saveCohortType(cohort);
 	}
 	
@@ -128,7 +121,7 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 		CohortM savedCohort = dao.saveCohort(cohort);
 		if (savedCohort.getCohortType().shouldDismissMembersFromPastCohorts()) {
 			// unsubscribe these cohort members from past cohorts
-			new CohortMemberUnsubscriber().dismissFromPastCohorts(savedCohort.getActiveCohortMembers(), savedCohort);
+			CohortMemberUnsubscriber.dismissFromPastCohorts(savedCohort.getActiveCohortMembers(), savedCohort, dao);
 		}
 		return savedCohort;
 	}
