@@ -17,7 +17,7 @@
     <patient_identifier patient_identifier_id="1" patient_id="2" identifier="1234-4" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="e997ac86-4d8a-40f3-bedb-da84d35917b8"/>
 
     <cohort_type cohort_type_id="1" name="Test cohortType" description="" creator="1"
-                 date_created="2005-01-01 00:00:00.0" voided="false" uuid="94517bf9-d8d7-4726-b4f1-a2dff6b36e2d"/>
+                 date_created="2005-01-01 00:00:00.0" voided="false" dismiss_members_from_past_cohorts="false" uuid="94517bf9-d8d7-4726-b4f1-a2dff6b36e2d"/>
     <cohort_Role cohort_role_id="1" name="Test Cohort Role" cohort_type_id="1" creator="1"
                  date_created="2021-01-01 00:00:00.0" voided="false" uuid="73517bf9-d8d7-4726-b4f1-a2dff6b36e34"/>
     <cohort_member cohort_member_id="1" patient_id="2" cohort_id="12" cohort_role_id="1" creator="1" is_head="1"

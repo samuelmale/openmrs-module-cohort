@@ -46,6 +46,19 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="cohort_types_1768" author="samuel">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="cohort_type" columnName="dismiss_members_from_past_cohorts"/>
+            </not>
+        </preConditions>
+        <comment>Add dismiss_members_from_past_cohorts column</comment>
+        <addColumn tableName="cohort_type">
+            <column name="dismiss_members_from_past_cohorts" type="tinyint(1)" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
     <changeSet id="cohortrole1065" author="sharon">
         <preConditions onFail="MARK_RAN">
             <not>

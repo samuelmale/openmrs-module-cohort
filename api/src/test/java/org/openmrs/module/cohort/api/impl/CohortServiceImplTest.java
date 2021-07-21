@@ -94,6 +94,9 @@ public class CohortServiceImplTest {
 	@Test
 	public void saveCohortMember_shouldSaveCohortMember() {
 		CohortMember member = new CohortMember();
+		CohortM cohort = new CohortM();
+		cohort.setCohortType(cohortType);
+		member.setCohort(cohort);
 		member.setId(1);
 		when(dao.saveCPatient(member)).thenReturn(member);
 		CohortMember result = cohortService.saveCohortMember(member);

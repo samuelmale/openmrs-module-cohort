@@ -8,6 +8,7 @@ import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.rest.v1_0.resource.CohortRest;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
@@ -33,11 +34,13 @@ public class CohortTypeRequestResource extends DataDelegatingCrudResource<Cohort
 			if (rep instanceof DefaultRepresentation) {
 				description.addProperty("name");
 				description.addProperty("description");
+				description.addProperty("dismissMembersFromPastCohorts");
 				description.addProperty("uuid");
 				description.addSelfLink();
 			} else if (rep instanceof FullRepresentation) {
 				description.addProperty("name");
 				description.addProperty("description");
+				description.addProperty("dismissMembersFromPastCohorts");
 				description.addProperty("uuid");
 				description.addProperty("auditInfo");
 				description.addSelfLink();
@@ -51,6 +54,7 @@ public class CohortTypeRequestResource extends DataDelegatingCrudResource<Cohort
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
 		description.addRequiredProperty("name");
 		description.addProperty("description");
+		description.addProperty("dismissMembersFromPastCohorts");
 		return description;
 	}
 
@@ -95,5 +99,10 @@ public class CohortTypeRequestResource extends DataDelegatingCrudResource<Cohort
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		List<CohortType> cohortTypes = Context.getService(CohortService.class).getAllCohortTypes();
 		return new NeedsPaging<CohortType>(cohortTypes, context);
+	}
+
+	@PropertyGetter("dismissMembersFromPastCohorts")
+	public static Boolean getDismissMembersFromPastCohorts(CohortType cohortType) {
+		return  cohortType.shouldDismissMembersFromPastCohorts();
 	}
 }

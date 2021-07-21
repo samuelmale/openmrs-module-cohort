@@ -13,13 +13,7 @@
  */
 package org.openmrs.module.cohort.api.impl;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,18 +26,7 @@ import org.openmrs.User;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.cohort.CohortAttribute;
-import org.openmrs.module.cohort.CohortAttributeType;
-import org.openmrs.module.cohort.CohortEncounter;
-import org.openmrs.module.cohort.CohortLeader;
-import org.openmrs.module.cohort.CohortM;
-import org.openmrs.module.cohort.CohortMember;
-import org.openmrs.module.cohort.CohortMemberVisit;
-import org.openmrs.module.cohort.CohortObs;
-import org.openmrs.module.cohort.CohortProgram;
-import org.openmrs.module.cohort.CohortRole;
-import org.openmrs.module.cohort.CohortType;
-import org.openmrs.module.cohort.CohortVisit;
+import org.openmrs.module.cohort.*;
 import org.openmrs.module.cohort.api.CohortService;
 import org.openmrs.module.cohort.api.db.CohortDAO;
 import org.openmrs.module.cohort.api.db.EncounterSearchCriteriaBuilder;
@@ -74,8 +57,13 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	}
 	
 	@Override
-	public CohortMember saveCohortMember(CohortMember cohort) {
-		return dao.saveCPatient(cohort);
+	public CohortMember saveCohortMember(CohortMember cohortMember) {
+		CohortMember savedMember =  dao.saveCPatient(cohortMember);
+		if (savedMember.getCohort().getCohortType().shouldDismissMembersFromPastCohorts()) {
+			// unsubscribe this cohort member from past cohorts
+			new CohortMemberUnsubscriber().dismissFromPastCohorts(Arrays.asList(savedMember), savedMember.getCohort());
+		}
+		return  savedMember;
 	}
 	
 	@Override
@@ -85,6 +73,13 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	@Override
 	public CohortType saveCohort(CohortType cohort) {
+		User u = Context.getAuthenticatedUser();
+		if (cohort.getCreator() == null) {
+			cohort.setCreator(u);
+		}
+		if (cohort.getId() == null && cohort.getDateCreated() == null) {
+			cohort.setDateCreated(new Date());
+		}
 		return dao.saveCohortType(cohort);
 	}
 	
@@ -130,9 +125,14 @@ public class CohortServiceImpl extends BaseOpenmrsService implements CohortServi
 	
 	@Override
 	public CohortM saveCohort(CohortM cohort) {
-		return dao.saveCohort(cohort);
+		CohortM savedCohort = dao.saveCohort(cohort);
+		if (savedCohort.getCohortType().shouldDismissMembersFromPastCohorts()) {
+			// unsubscribe these cohort members from past cohorts
+			new CohortMemberUnsubscriber().dismissFromPastCohorts(savedCohort.getActiveCohortMembers(), savedCohort);
+		}
+		return savedCohort;
 	}
-	
+
 	@Override
 	public void purgeCohort(CohortM cohort) {
 		dao.purgeCohort(cohort);

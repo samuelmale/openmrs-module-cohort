@@ -24,6 +24,12 @@ public class CohortType extends BaseOpenmrsData {
 
 	private String description;
 
+	@Column(name = "dismiss_members_from_past_cohorts")
+	private Boolean dismissMembersFromPastCohorts;
+
+	public CohortType() {
+		this.dismissMembersFromPastCohorts = Boolean.FALSE;
+	}
 	@Override
 	public Integer getId() {
 		return getCohortTypeId();
@@ -56,5 +62,13 @@ public class CohortType extends BaseOpenmrsData {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Boolean shouldDismissMembersFromPastCohorts() {
+		return dismissMembersFromPastCohorts;
+	}
+
+	public void setDismissMembersFromPastCohorts(Boolean dismissMembersFromPastCohorts) {
+		this.dismissMembersFromPastCohorts = dismissMembersFromPastCohorts;
 	}
 }
