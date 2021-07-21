@@ -32,10 +32,12 @@ public class CohortMemberUnsubscriber {
         if (cohortService == null) {
             cohortService = Context.getService(CohortService.class);
         }
-        return candidates.stream().map(member -> member.getPatient()).
-                map(patient -> cohortService.findCohortMembersByPatient(patient.getId())).flatMap(Collection::stream).
-                filter(member -> !(member.getCohort().getUuid().equals(currentCohort.getUuid()))).
-                map(dueMembership -> {
+        return candidates.stream()
+                .map(member -> member.getPatient())
+                .map(patient -> cohortService.findCohortMembersByPatient(patient.getId()))
+                .flatMap(Collection::stream)
+                .filter(member -> !(member.getCohort().getUuid().equals(currentCohort.getUuid())))
+                .map(dueMembership -> {
                     dueMembership.setVoided(true);
                     dueMembership.setVoidReason(VOID_REASON);
                     return cohortService.saveCohortMember(dueMembership);

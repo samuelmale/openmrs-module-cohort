@@ -59,6 +59,13 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="cohort_types_1769" author="samuel">
+        <preConditions>
+            <columnExists tableName="cohort_type" columnName="uuid" />
+        </preConditions>
+        <comment>Add unique constraint on the cohort_type.uuid column</comment>
+        <addUniqueConstraint tableName="cohort_type" columnNames="uuid" constraintName="COHORT_TYPE_UUID"/>
+    </changeSet>
     <changeSet id="cohortrole1065" author="sharon">
         <preConditions onFail="MARK_RAN">
             <not>
