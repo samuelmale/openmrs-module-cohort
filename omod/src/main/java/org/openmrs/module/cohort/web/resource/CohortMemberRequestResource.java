@@ -107,12 +107,12 @@ public class CohortMemberRequestResource extends DataDelegatingCrudResource<Coho
 		}
 		for (CohortMember member : cohort.getCohortMembers()) {
 			if (member.getPatient().getUuid().equals(new_patient.getUuid()) && !cohortMember.getVoided()) {
-				if (member.getEndDate() == null) {
-					throw new RuntimeException("Patient already exists in group.");
-				} else {
+				if (member.getVoided() || member.getEndDate() != null) {
 					member.setVoided(false);
 					member.setEndDate(null);
 					cohortMember = member;
+				} else {
+					throw new RuntimeException("Patient already exists in group.");
 				}
 			}
 		}
